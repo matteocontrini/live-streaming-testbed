@@ -5,7 +5,7 @@ const PORT = 3000;
 
 function startExpress() {
     const app = express();
-    app.use(express.static('static'));
+    app.use(express.static('frontend/dist'));
     server = app.listen(PORT);
     console.log('Frontend server listening on port ' + PORT);
 }

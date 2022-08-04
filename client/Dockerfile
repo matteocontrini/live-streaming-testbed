@@ -3,20 +3,26 @@ FROM node:16-bullseye
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && \
-    apt-get install -y ca-certificates curl chromium libnss3-tools dnsutils && \
+    apt-get install -y ca-certificates curl chromium libnss3-tools && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src
 
-COPY package*.json ./
+# Build frontend
+COPY frontend frontend
+RUN cd frontend && npm ci && npm run build
 
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
+# Install backend dependencies
+COPY package*.json ./
 RUN npm ci
 
-COPY src .
-COPY static static
+# Copy backend files
+COPY src src
+
+# Copy run script
 COPY run.sh .
 
 ENTRYPOINT ["./run.sh"]

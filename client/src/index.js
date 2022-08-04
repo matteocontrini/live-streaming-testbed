@@ -71,4 +71,7 @@ async function startBrowser() {
 }
 
 startExpress();
-startBrowser();
+
+if (process.argv[2] != '--disable-browser') {
+    startBrowser();
+}

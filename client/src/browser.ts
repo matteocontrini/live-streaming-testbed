@@ -1,16 +1,6 @@
-const puppeteer = require('puppeteer');
-const express = require('express');
+import puppeteer from 'puppeteer';
 
-const PORT = 3000;
-
-function startExpress() {
-    const app = express();
-    app.use(express.static('frontend/dist'));
-    server = app.listen(PORT);
-    console.log('Frontend server listening on port ' + PORT);
-}
-
-async function startBrowser() {
+export async function startBrowser() {
     const browser = await puppeteer.launch({
         dumpio: true,
         args: [
@@ -58,7 +48,7 @@ async function startBrowser() {
     await page.click('#play');
 
     await page.waitForTimeout(2000);
-    
+
     // await page.tracing.stop();
 
     while (true) {
@@ -68,10 +58,4 @@ async function startBrowser() {
 
     // await browser.close();
     // server.close();
-}
-
-startExpress();
-
-if (process.argv[2] != '--disable-browser') {
-    startBrowser();
 }

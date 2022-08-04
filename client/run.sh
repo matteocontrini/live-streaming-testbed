@@ -29,4 +29,4 @@ cat /etc/resolv.conf
 
 echo "Starting the client..."
 
-node src/index.js
+npm run start

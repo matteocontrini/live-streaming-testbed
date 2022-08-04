@@ -15,12 +15,11 @@ RUN cd frontend && npm ci && npm run build
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
-# Install backend dependencies
+# Build backend
 COPY package*.json ./
-RUN npm ci
-
-# Copy backend files
+COPY tsconfig.json .
 COPY src src
+RUN npm ci && npm run build
 
 # Copy run script
 COPY run.sh .

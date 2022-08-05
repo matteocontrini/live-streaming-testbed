@@ -1,9 +1,7 @@
 {
     "extends": "@tsconfig/node16/tsconfig.json",
     "compilerOptions": {
-        "outDir": "dist",
-        "baseUrl": "src",
-        "allowSyntheticDefaultImports": true,
+        "outDir": "dist"
     },
     "include": [
         "src/**/*.ts"

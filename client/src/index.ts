@@ -1,7 +1,7 @@
 import { startBrowser } from './browser';
-import { startAPI } from './api';
+import { startServer } from './api/server';
 
-startAPI();
+startServer();
 
 if (process.argv[2] != '--disable-browser') {
     startBrowser();

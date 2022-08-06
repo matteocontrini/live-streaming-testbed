@@ -12,6 +12,8 @@
     "vite": "^3.0.0"
   },
   "dependencies": {
-    "dashjs": "^4.4.1"
+    "@trpc/client": "^9.26.2",
+    "dashjs": "^4.4.1",
+    "superjson": "^1.9.1"
   }
 }

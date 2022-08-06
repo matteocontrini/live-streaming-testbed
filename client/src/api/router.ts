@@ -20,7 +20,7 @@ export const appRouter = trpc
             timestamp: z.date(),
             videoBuffer: z.number(),
             audioBuffer: z.number(),
-            latency: z.number(),
+            latency: z.number().or(z.nan()),
         }),
         async resolve({ input }) {
             console.log(input);

@@ -63,7 +63,7 @@ def create_topology():
     mgr.addContainer(
         "client", "h1", "client", None,
         docker_args={
-            'volumes': {getcwd() + '/client/out': {'bind': '/out', 'mode': 'rw'}},
+            'volumes': {getcwd() + '/client/out': {'bind': '/client/out', 'mode': 'rw'}},
         }
     )
 

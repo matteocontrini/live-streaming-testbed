@@ -1,3 +1,4 @@
+import path from 'path';
 import puppeteer from 'puppeteer';
 
 export async function startBrowser() {
@@ -52,7 +53,7 @@ export async function startBrowser() {
     // await page.tracing.stop();
 
     while (true) {
-        await page.screenshot({ path: '/out/screenshot.png' });
+        await page.screenshot({ path: path.resolve(__dirname, '../out/screenshot.png') });
         await page.waitForTimeout(1000);
     }
 

@@ -1,4 +1,4 @@
-import { startSendingMetrics } from './metrics';
+import EventsCollector from './events';
 import './style.css';
 import { createPlayer } from './ui';
 
@@ -9,4 +9,9 @@ document.getElementById('play')!.addEventListener('click', () => {
     player.play();
 });
 
-startSendingMetrics(player);
+const collector = new EventsCollector(player);
+collector.start();
+
+setTimeout(() => {
+    collector.stop();
+}, 10 * 1000);

@@ -34,18 +34,20 @@ def create_topology():
         'h3', dimage='dev_test', ip='10.0.0.3', docker_args={'hostname': 'h3'}
     )
 
-    info('*** Adding switches and links\n')
+    info('*** Adding switches\n')
     s1 = net.addSwitch('s1')
     s2 = net.addSwitch('s2')
-    net.addLink(h1, s1, bw=100, delay='1ms')
-    link: TCLink = net.addLink(s1, s2, bw=LINK_DEFAULT_BANDWIDTH, delay=LINK_DEFAULT_DELAY)
-    net.addLink(s2, h2, bw=100, delay='1ms')
 
-    info('*** Starting network\n')
+    info('*** Adding links\n')
+    net.addLink(h1, s1, bw=100, delay='0ms')
+    link: TCLink = net.addLink(s1, s2, bw=LINK_DEFAULT_BANDWIDTH, delay=LINK_DEFAULT_DELAY)
+    net.addLink(s2, h2, bw=100, delay='0ms')
+
+    info('\n*** Starting network\n')
     net.start()
 
     info('*** Pinging\n')
-    net.ping((h1, h2))
+    net.pingFull((h1, h2))
 
     h1.cmd(f'echo "{h2.IP()} cdn.local" >> /etc/hosts')
 

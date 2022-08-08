@@ -12,7 +12,9 @@ What about using Chrome instead of Chromium? Unfortunately I'm on ARM and Chrome
 
 ## Instructions
 
-TODO
+- Install [ComNetsEmu](https://github.com/stevelorenz/comnetsemu), start the Vagrant VM and SSH into it
+- Run `./build.sh`
+- Run `./start.sh`
 
 ## Development setup
 

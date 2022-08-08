@@ -25,7 +25,7 @@ export async function startBrowser() {
     page
         .on('console', message =>
             console.log(`[CONSOLE][${message.type().toUpperCase()}] ${message.text()}`))
-        .on('pageerror', ({ message }) => console.log(`[PAGE_ERROR] ${message}`))
+        .on('pageerror', ({message}) => console.log(`[PAGE_ERROR] ${message}`))
         .on('request', request => {
             if (!request.url().startsWith('data:')) {
                 console.log(`[REQUEST] ${request.url()}`);
@@ -53,7 +53,7 @@ export async function startBrowser() {
     // await page.tracing.stop();
 
     while (true) {
-        await page.screenshot({ path: path.resolve(__dirname, '../out/screenshot.png') });
+        await page.screenshot({path: path.resolve(__dirname, '../out/screenshot.png')});
         await page.waitForTimeout(1000);
     }
 

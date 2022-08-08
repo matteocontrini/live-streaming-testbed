@@ -12,14 +12,14 @@ export async function sendBufferEmptyEvent(mediaType: string) {
         timestamp: new Date(),
         mediaType
     });
-};
+}
 
 export async function sendBufferLoadedEvent(mediaType: string) {
     await client.mutation('sendBufferLoaded', {
         timestamp: new Date(),
         mediaType
     });
-};
+}
 
 export async function sendStatus(videoBuffer: number, audioBuffer: number, latency: number) {
     await client.mutation('sendStatus', {
@@ -28,8 +28,4 @@ export async function sendStatus(videoBuffer: number, audioBuffer: number, laten
         audioBuffer,
         latency,
     });
-};
-
-export async function stop() {
-    await client.mutation('stop');
-};
+}

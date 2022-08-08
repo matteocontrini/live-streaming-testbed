@@ -22,11 +22,11 @@ const events: Event[] = [];
 export function logEvent(event: Event) {
     console.log(event);
     events.push(event);
-};
+}
 
 export async function finish() {
     console.log('Stop requested, saving events to file');
     const file = path.resolve(__dirname, '../../out/player_events.json');
     const data = JSON.stringify(events);
     await fs.writeFile(file, data);
-};
+}

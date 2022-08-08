@@ -11,7 +11,3 @@ document.getElementById('play')!.addEventListener('click', () => {
 
 const collector = new EventsCollector(player);
 collector.start();
-
-setTimeout(() => {
-    collector.stop();
-}, 10 * 1000);

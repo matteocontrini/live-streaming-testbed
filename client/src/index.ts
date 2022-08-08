@@ -1,8 +1,10 @@
-import { startBrowser } from './browser';
-import { startServer } from './api/server';
+import {startBrowser} from './browser';
+import {startServer} from './api/server';
 
-startServer();
+(async () => {
+    await startServer();
 
-if (process.argv[2] != '--disable-browser') {
-    startBrowser();
-}
+    if (process.argv[2] != '--disable-browser') {
+        await startBrowser();
+    }
+})();

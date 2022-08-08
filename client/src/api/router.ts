@@ -1,7 +1,7 @@
 import * as trpc from '@trpc/server';
-import { z } from 'zod';
+import {z} from 'zod';
 import superjson from 'superjson';
-import { logEvent, finish } from '../events/events';
+import {logEvent, finish} from '../events/events';
 
 export const appRouter = trpc
     .router()
@@ -11,7 +11,7 @@ export const appRouter = trpc
             timestamp: z.date(),
             mediaType: z.string(),
         }),
-        async resolve({ input }) {
+        async resolve({input}) {
             logEvent({
                 timestamp: input.timestamp,
                 type: 'BUFFER_EMPTY',
@@ -27,7 +27,7 @@ export const appRouter = trpc
             timestamp: z.date(),
             mediaType: z.string(),
         }),
-        async resolve({ input }) {
+        async resolve({input}) {
             logEvent({
                 timestamp: input.timestamp,
                 type: 'BUFFER_LOADED',
@@ -45,7 +45,7 @@ export const appRouter = trpc
             audioBuffer: z.number(),
             latency: z.number().or(z.nan()),
         }),
-        async resolve({ input }) {
+        async resolve({input}) {
             logEvent({
                 timestamp: input.timestamp,
                 type: 'STATUS',

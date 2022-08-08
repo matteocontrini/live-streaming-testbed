@@ -1,5 +1,5 @@
-import dashjs, { BufferEvent } from "dashjs";
-import { MediaPlayerClass } from "dashjs";
+import dashjs, {BufferEvent} from "dashjs";
+import {MediaPlayerClass} from "dashjs";
 import * as api from "./api";
 
 const INTERVAL = 500;
@@ -18,31 +18,22 @@ class EventsCollector {
         this.interval = setInterval(this.tick.bind(this), INTERVAL);
     }
 
-    onBufferEmpty(e: BufferEvent) {
+    async onBufferEmpty(e: BufferEvent) {
         console.log('Buffer empty ' + e.mediaType);
-        api.sendBufferEmptyEvent(e.mediaType);
+        await api.sendBufferEmptyEvent(e.mediaType);
     }
 
-    onBufferLoaded(e: BufferEvent) {
+    async onBufferLoaded(e: BufferEvent) {
         console.log('Buffer loaded ' + e.mediaType);
-        api.sendBufferLoadedEvent(e.mediaType);
+        await api.sendBufferLoadedEvent(e.mediaType);
     }
 
-    tick() {
+    async tick() {
         const videoBuffer = this.player.getDashMetrics().getCurrentBufferLevel('video');
         const audioBuffer = this.player.getDashMetrics().getCurrentBufferLevel('audio');
         const latency = this.player.getCurrentLiveLatency();
         console.log(`video=${videoBuffer} | audio=${audioBuffer} | latency=${latency}`);
-        api.sendStatus(videoBuffer, audioBuffer, latency);
-    }
-
-    stop() {
-        console.log('Stopping simulation');
-        this.player.off(dashjs.MediaPlayer.events.BUFFER_EMPTY, this.onBufferEmpty);
-        this.player.off(dashjs.MediaPlayer.events.BUFFER_LOADED, this.onBufferLoaded);
-        clearInterval(this.interval);
-        this.player.destroy();
-        api.stop();
+        await api.sendStatus(videoBuffer, audioBuffer, latency);
     }
 }
 

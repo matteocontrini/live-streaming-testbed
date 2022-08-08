@@ -2,6 +2,7 @@ import threading
 
 from bottle import request, Bottle
 from mininet.link import TCLink
+from mininet.log import info
 
 
 class ApiServer:
@@ -28,7 +29,7 @@ class ApiServer:
         bw = request.json.get('bw')
         delay = request.json.get('delay')
         loss = request.json.get('loss')
-        print(f'\n*** Setting bandwidth={bw} delay={delay} loss={loss}')
+        info(f'\n*** Setting bandwidth={bw} delay={delay} loss={loss}\n')
         self.link.intf1.config(bw=bw, delay=delay, loss=loss)
         self.link.intf2.config(bw=bw, delay=delay, loss=loss)
         return 'OK'

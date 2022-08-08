@@ -1,9 +1,17 @@
 from os import getcwd
+
+import pyroute2
 from comnetsemu.cli import CLI
 from comnetsemu.net import Containernet, VNFManager
 from mininet.link import TCLink
 from mininet.log import info, setLogLevel
 from mininet.node import Controller
+
+from api import ApiServer
+
+LINK_DEFAULT_BANDWIDTH = 10
+LINK_DEFAULT_DELAY = '15ms'
+
 
 def create_topology():
     net = Containernet(controller=Controller, link=TCLink)
@@ -30,9 +38,7 @@ def create_topology():
     s1 = net.addSwitch("s1")
     s2 = net.addSwitch("s2")
     net.addLink(h1, s1, bw=100, delay="1ms")
-    link = net.addLink(s1, s2, bw=10, delay="15ms")
-    # link.intf1.config(bw=5)
-    # link.intf2.config(bw=5)
+    link: TCLink = net.addLink(s1, s2, bw=LINK_DEFAULT_BANDWIDTH, delay=LINK_DEFAULT_DELAY)
     net.addLink(s2, h2, bw=100, delay="1ms")
 
     info("*** Starting network\n")
@@ -40,9 +46,9 @@ def create_topology():
 
     info("*** Pinging\n")
     net.ping((h1, h2))
-    
+
     h1.cmd(f"echo '{h2.IP()} cdn.local' >> /etc/hosts")
-    
+
     # Create live video source container
     mgr.addContainer(
         "live-source", "h3", "live-source", None,
@@ -66,6 +72,13 @@ def create_topology():
             'volumes': {getcwd() + '/client/out': {'bind': '/client/out', 'mode': 'rw'}},
         }
     )
+
+    api_ip = pyroute2.IPRoute().get_addr(label='docker0')[0].get_attr('IFA_ADDRESS')
+    port = 8080
+
+    print(f'*** Starting the API server, listening on {api_ip}:{port}')
+    server = ApiServer(link, api_ip, port)
+    server.start()
 
     CLI(net)
 

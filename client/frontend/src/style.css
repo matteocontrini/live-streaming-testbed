@@ -24,9 +24,8 @@ body {
 }
 
 #app {
-  margin: 0 auto;
+  width: 100%;
   padding: 2rem;
-  text-align: center;
 }
 
 button {
@@ -47,5 +46,6 @@ button:hover {
 }
 
 video {
-  margin-bottom: 24px;
+  margin-right: 24px;
+  float: left;
 }

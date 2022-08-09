@@ -1,12 +1,22 @@
 import {sleep} from '../utils';
 import {request} from 'undici';
 import {logEvent, saveEvents} from '../events/events';
+import chalk from 'chalk';
+import {sendMessage} from '../api/server';
 
-const API_HOST = process.env.API_HOST || 'localhost';
+const API_HOST = process.env.API_HOST || 'localhost:3000';
 const PREFIX = `http://${API_HOST}`;
 
 abstract class ExperimentStep {
     abstract run(): Promise<void>;
+}
+
+class ResetStep extends ExperimentStep {
+    async run() {
+        const url = 'https://cdn.local/manifest.mpd';
+        const msg = {type: 'reset', source: url};
+        await sendMessage(msg);
+    }
 }
 
 class SleepStep extends ExperimentStep {
@@ -38,7 +48,7 @@ class UpdateLinkConfigStep extends ExperimentStep {
         });
 
         if (resp.statusCode !== 200) {
-            throw new Error(`Failed to update link config: ${resp.statusCode}`);
+            console.log(chalk.red(`Error updating link config: ${resp.statusCode}`));
         }
 
         logEvent({
@@ -66,7 +76,7 @@ class StopStep extends ExperimentStep {
         });
 
         if (resp.statusCode !== 200) {
-            throw new Error(`Failed to stop: ${resp.statusCode}`);
+            console.log(chalk.red(`Error stopping: ${resp.statusCode}`));
         }
 
         logEvent({
@@ -80,6 +90,7 @@ const experiments = [
     {
         name: 'Test',
         steps: [
+            new ResetStep(),
             new SleepStep(5),
             new UpdateLinkConfigStep(1, '10ms', 0),
             new SleepStep(10),

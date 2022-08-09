@@ -1,19 +1,25 @@
 import {MediaPlayer, MediaPlayerClass} from 'dashjs';
 
-export function createPlayer(): MediaPlayerClass {
+export function init() {
     document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
         <video id="player" width="600" height="300" controls></video>
-        <br>
-        <button id="play">Play</button>
+        <button id="ready">READY</button>
     `;
+}
 
+let player: MediaPlayerClass;
+
+export function createPlayer(): MediaPlayerClass {
     // const url = 'https://livesim.dashif.org/livesim/testpic_2s/Manifest.mpd';
-    const url = 'https://cdn.local/manifest.mpd';
+    // const url = 'https://cdn.local/manifest.mpd';
 
-    const player = MediaPlayer().create();
-    player.initialize(document.querySelector<HTMLVideoElement>('#player')!, url);
+    let element = document.getElementById('player')!;
 
-    player.setVolume(0);
+    player = MediaPlayer().create();
+
+    player.initialize(element);
+
+    player.setMute(true);
 
     player.updateSettings({
         streaming: {
@@ -24,4 +30,8 @@ export function createPlayer(): MediaPlayerClass {
     });
 
     return player;
+}
+
+export function resetPlayer(url: string) {
+    player.attachSource(url);
 }

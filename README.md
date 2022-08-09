@@ -1,5 +1,7 @@
 # Testbed for MPEG-DASH live streaming
 
+>⚠️ Work in progress :)
+
 This repository contains a testbed for emulating a live video streaming setup based on MPEG-DASH over resource-constrained networks.
 
 The testbed is based on the [ComNetsEmu](https://github.com/stevelorenz/comnetsemu) emulator.
@@ -15,6 +17,10 @@ What about using Chrome instead of Chromium? Unfortunately I'm on ARM and Chrome
 - Install [ComNetsEmu](https://github.com/stevelorenz/comnetsemu), start the Vagrant VM and SSH into it
 - Run `./build.sh`
 - Run `./start.sh`
+
+## Analysis
+
+TODO
 
 ## Development setup
 

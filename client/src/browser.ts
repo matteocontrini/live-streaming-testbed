@@ -52,7 +52,7 @@ export async function startBrowser() {
     await page.goto('http://localhost:3000');
     await page.waitForTimeout(2000);
 
-    await page.click('#play');
+    await page.click('#ready');
 
     await page.waitForTimeout(2000);
 

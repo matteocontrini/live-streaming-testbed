@@ -1,4 +1,4 @@
-import {MediaPlayer, MediaPlayerClass} from "dashjs";
+import {MediaPlayer, MediaPlayerClass} from 'dashjs';
 
 export function createPlayer(): MediaPlayerClass {
     document.querySelector<HTMLDivElement>('#app')!.innerHTML = `

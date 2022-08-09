@@ -1,3 +1,8 @@
+import os
+import signal
+import sys
+import threading
+from io import StringIO
 from os import getcwd
 
 import pyroute2
@@ -49,6 +54,13 @@ def create_topology():
     info('*** Pinging\n')
     net.pingFull((h1, h2))
 
+    api_ip = pyroute2.IPRoute().get_addr(label='docker0')[0].get_attr('IFA_ADDRESS')
+    port = 8080
+    print(f'*** Starting the API server, listening on {api_ip}:{port}')
+    server = ApiServer(link, api_ip, port)
+    stop = server.start()
+
+    print('*** Updating h1 hosts file\n')
     h1.cmd(f'echo "{h2.IP()} cdn.local" >> /etc/hosts')
 
     # Create live video source container
@@ -72,17 +84,16 @@ def create_topology():
         'client', 'h1', 'client', None,
         docker_args={
             'volumes': {getcwd() + '/client/out': {'bind': '/client/out', 'mode': 'rw'}},
+            'environment': {'API_HOST': f'{api_ip}:{port}'}
         }
     )
 
-    api_ip = pyroute2.IPRoute().get_addr(label='docker0')[0].get_attr('IFA_ADDRESS')
-    port = 8080
-
-    print(f'*** Starting the API server, listening on {api_ip}:{port}')
-    server = ApiServer(link, api_ip, port)
-    server.start()
-
-    CLI(net)
+    if len(sys.argv) >= 2 and sys.argv[1] == '--cli':
+        CLI(net)
+    else:
+        # Handle CTRL+C
+        signal.signal(signal.SIGINT, lambda _, __: stop.set())
+        stop.wait()
 
     info('*** Stopping network')
     mgr.stop()

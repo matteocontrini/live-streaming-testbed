@@ -1,7 +1,8 @@
 import * as trpc from '@trpc/server';
 import {z} from 'zod';
 import superjson from 'superjson';
-import {logEvent, finish} from '../events/events';
+import {logEvent} from '../events/events';
+import {startExperiments} from '../experiments/runner';
 
 export const appRouter = trpc
     .router()
@@ -58,9 +59,10 @@ export const appRouter = trpc
             return true;
         }
     })
-    .mutation('stop', {
+    .mutation('startExperiments', {
         async resolve() {
-            finish();
+            // noinspection ES6MissingAwait
+            startExperiments();
             return true;
         }
     });

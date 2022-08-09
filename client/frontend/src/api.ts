@@ -1,5 +1,5 @@
-import type { AppRouter } from '../../src/api/router';
-import { createTRPCClient } from '@trpc/client';
+import type {AppRouter} from '../../src/api/router';
+import {createTRPCClient} from '@trpc/client';
 import superjson from 'superjson';
 
 const client = createTRPCClient<AppRouter>({
@@ -28,4 +28,8 @@ export async function sendStatus(videoBuffer: number, audioBuffer: number, laten
         audioBuffer,
         latency,
     });
+}
+
+export async function startExperiments() {
+    await client.mutation('startExperiments');
 }

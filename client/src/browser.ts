@@ -1,9 +1,12 @@
 import path from 'path';
 import puppeteer from 'puppeteer';
 
+const DEBUG = false;
+
 export async function startBrowser() {
+    const additionalArgs = DEBUG ? ['--v=1'] : [];
     const browser = await puppeteer.launch({
-        dumpio: true,
+        dumpio: DEBUG,
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
@@ -12,33 +15,36 @@ export async function startBrowser() {
             //'--ignore-certificate-errors',
             // '--ignore-certificate-errors-spki-list=UKSGn1BWV+byKw1SyRSFQjtNpYIetyS0P349jea/6T4=',
             // '--log-net-log=/out/netlog.json',
-            '--v=1'
+            ...additionalArgs
         ]
     });
 
     const page = await browser.newPage();
 
-    await page.setRequestInterception(true);
-
     // await page.tracing.start({path: '/out/trace.json', categories: ['netlog']});
 
     page
-        .on('console', message =>
-            console.log(`[CONSOLE][${message.type().toUpperCase()}] ${message.text()}`))
         .on('pageerror', ({message}) => console.log(`[PAGE_ERROR] ${message}`))
-        .on('request', request => {
-            if (!request.url().startsWith('data:')) {
-                console.log(`[REQUEST] ${request.url()}`);
-            }
-            request.continue();
-        })
-        .on('response', response => {
-            if (!response.url().startsWith('data:')) {
-                console.log(`[RESPONSE] ${response.status()} ${response.url()}`)
-            }
-        })
         .on('requestfailed', request =>
             console.log(`[REQ_FAILED] ${request.failure().errorText} ${request.url()}`));
+
+    if (DEBUG) {
+        await page.setRequestInterception(true);
+        page
+            .on('console', message =>
+                console.log(`[CONSOLE][${message.type().toUpperCase()}] ${message.text()}`))
+            .on('request', request => {
+                if (!request.url().startsWith('data:')) {
+                    console.log(`[REQUEST] ${request.url()}`);
+                }
+                request.continue();
+            })
+            .on('response', response => {
+                if (!response.url().startsWith('data:')) {
+                    console.log(`[RESPONSE] ${response.status()} ${response.url()}`)
+                }
+            })
+    }
 
     const version = await page.browser().version();
     console.log(version);
@@ -57,6 +63,7 @@ export async function startBrowser() {
         await page.waitForTimeout(1000);
     }
 
+    // TODO: close when stopping
     // await browser.close();
     // server.close();
 }

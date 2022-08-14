@@ -2,7 +2,7 @@ import dashjs, {BufferEvent} from "dashjs";
 import {MediaPlayerClass} from "dashjs";
 import * as api from "./api";
 
-const INTERVAL = 500;
+const INTERVAL = 250;
 
 class EventsCollector {
     interval: NodeJS.Timer | undefined;

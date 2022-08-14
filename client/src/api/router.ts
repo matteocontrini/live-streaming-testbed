@@ -10,7 +10,6 @@ export const appRouter = trpc
     .transformer(superjson)
     .mutation('sendBufferEmpty', {
         input: z.object({
-            timestamp: z.date(),
             mediaType: z.string(),
         }),
         async resolve({input}) {
@@ -26,7 +25,6 @@ export const appRouter = trpc
     })
     .mutation('sendBufferLoaded', {
         input: z.object({
-            timestamp: z.date(),
             mediaType: z.string(),
         }),
         async resolve({input}) {
@@ -42,7 +40,6 @@ export const appRouter = trpc
     })
     .mutation('sendStatus', {
         input: z.object({
-            timestamp: z.date(),
             videoBuffer: z.number(),
             audioBuffer: z.number(),
             latency: z.number().or(z.nan()),

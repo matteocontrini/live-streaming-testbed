@@ -9,21 +9,18 @@ const client = createTRPCClient<AppRouter>({
 
 export async function sendBufferEmptyEvent(mediaType: string) {
     await client.mutation('sendBufferEmpty', {
-        timestamp: new Date(),
         mediaType
     });
 }
 
 export async function sendBufferLoadedEvent(mediaType: string) {
     await client.mutation('sendBufferLoaded', {
-        timestamp: new Date(),
         mediaType
     });
 }
 
 export async function sendStatus(videoBuffer: number, audioBuffer: number, latency: number) {
     await client.mutation('sendStatus', {
-        timestamp: new Date(),
         videoBuffer,
         audioBuffer,
         latency,

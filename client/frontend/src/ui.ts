@@ -10,9 +10,6 @@ export function init() {
 let player: MediaPlayerClass;
 
 export function createPlayer(): MediaPlayerClass {
-    // const url = 'https://livesim.dashif.org/livesim/testpic_2s/Manifest.mpd';
-    // const url = 'https://cdn.local/manifest.mpd';
-
     let element = document.getElementById('player')!;
 
     player = MediaPlayer().create();

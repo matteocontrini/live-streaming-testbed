@@ -30,4 +30,4 @@ If you use IntelliJ/PyCharm and want Python type hints to work, configure the pr
 
 For the network dataset:
 
-- D. Raca, J.J. Quinlan, A.H. Zahran, C.J. Sreenan. "Beyond Throughput: a 4G LTE Dataset with Channel and Context Metrics" In Proceedings of ACM Multimedia Systems Conference (MMSys 2018), Amsterdam, The Netherlands, June 12 - 15, 2018.  Further details on our datasets are available in the conference paper. 
+>D. Raca, J.J. Quinlan, A.H. Zahran, C.J. Sreenan. "Beyond Throughput: a 4G LTE Dataset with Channel and Context Metrics" In Proceedings of ACM Multimedia Systems Conference (MMSys 2018), Amsterdam, The Netherlands, June 12 - 15, 2018.  Further details on our datasets are available in the conference paper. 

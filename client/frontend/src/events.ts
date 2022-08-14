@@ -1,6 +1,6 @@
-import dashjs, {BufferEvent} from "dashjs";
-import {MediaPlayerClass} from "dashjs";
-import * as api from "./api";
+import dashjs, {BufferEvent} from 'dashjs';
+import {MediaPlayerClass} from 'dashjs';
+import * as api from './api';
 
 const INTERVAL = 250;
 
@@ -15,6 +15,8 @@ class EventsCollector {
     start() {
         this.player.on(dashjs.MediaPlayer.events.BUFFER_EMPTY, this.onBufferEmpty);
         this.player.on(dashjs.MediaPlayer.events.BUFFER_LOADED, this.onBufferLoaded);
+        this.player.on(dashjs.MediaPlayer.events.PLAYBACK_WAITING, this.onPlaybackWaiting);
+        this.player.on(dashjs.MediaPlayer.events.PLAYBACK_PLAYING, this.onPlaybackPlaying);
         this.interval = setInterval(this.tick.bind(this), INTERVAL);
     }
 
@@ -26,6 +28,16 @@ class EventsCollector {
     async onBufferLoaded(e: BufferEvent) {
         console.log('Buffer loaded ' + e.mediaType);
         await api.sendBufferLoadedEvent(e.mediaType);
+    }
+
+    async onPlaybackWaiting() {
+        console.log('Playback stalled');
+        await api.sendPlaybackStalledEvent();
+    }
+
+    async onPlaybackPlaying() {
+        console.log('Playback resumed');
+        await api.sendPlaybackResumedEvent();
     }
 
     async tick() {

@@ -20,7 +20,8 @@ type LinkConfigUpdateEventData = {
 
 type Event = {
     timestamp: number;
-    type: 'BUFFER_EMPTY' | 'BUFFER_LOADED' | 'STATUS' | 'LINK_CONFIG_UPDATE' | 'STOP';
+    type: 'BUFFER_EMPTY' | 'BUFFER_LOADED' | 'PLAYBACK_STALLED' | 'PLAYBACK_RESUMED' |
+        'STATUS' | 'LINK_CONFIG_UPDATE' | 'STOP';
     data?: StatusEventData | BufferEventData | LinkConfigUpdateEventData;
 }
 
@@ -37,9 +38,11 @@ export function logEvent(event: Event) {
             color = chalk.cyan;
             break
         case 'BUFFER_EMPTY':
+        case 'PLAYBACK_STALLED':
             color = chalk.red;
             break
         case 'BUFFER_LOADED':
+        case 'PLAYBACK_RESUMED':
             color = chalk.yellow
             break
     }
@@ -55,5 +58,5 @@ export async function saveEvents(name: string) {
     console.log('Saving events to file');
     const file = path.resolve(__dirname, `../../out/experiment_${name}.json`);
     const data = JSON.stringify(events);
-    await fs.writeFile(file, data);
+    await fs.writeFile(file, data + '\n');
 }

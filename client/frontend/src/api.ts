@@ -19,6 +19,14 @@ export async function sendBufferLoadedEvent(mediaType: string) {
     });
 }
 
+export async function sendPlaybackStalledEvent() {
+    await client.mutation('sendPlaybackStalled');
+}
+
+export async function sendPlaybackResumedEvent() {
+    await client.mutation('sendPlaybackResumed');
+}
+
 export async function sendStatus(videoBuffer: number, audioBuffer: number, latency: number) {
     await client.mutation('sendStatus', {
         videoBuffer,

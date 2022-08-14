@@ -32,12 +32,12 @@ def main():
         {
             'input': 'A_2018.02.05_13.35.50.csv',
             'output': 'lte.csv',
-            'range': [1, 61]
+            'range': [1, 60]
         },
         {
             'input': 'B_2018.01.17_15.56.48.csv',
             'output': 'hspa+.csv',
-            'range': [541, 601]
+            'range': [541, 600]
         }
     ]
 

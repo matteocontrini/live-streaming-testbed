@@ -38,6 +38,24 @@ export const appRouter = trpc
             return true;
         },
     })
+    .mutation('sendPlaybackStalled', {
+        async resolve() {
+            logEvent({
+                timestamp: getTimestamp(),
+                type: 'PLAYBACK_STALLED',
+            });
+            return true;
+        },
+    })
+    .mutation('sendPlaybackResumed', {
+        async resolve() {
+            logEvent({
+                timestamp: getTimestamp(),
+                type: 'PLAYBACK_RESUMED',
+            });
+            return true;
+        },
+    })
     .mutation('sendStatus', {
         input: z.object({
             videoBuffer: z.number(),

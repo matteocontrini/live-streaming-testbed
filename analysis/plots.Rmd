@@ -1,0 +1,107 @@
+---
+title: "Testbed analysis"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(jsonlite)
+library(tidyverse)
+library(here)
+library(scales)
+```
+
+
+```{r}
+filename = 'experiment_lte.json'
+df <- fromJSON(readLines(here(paste0('client/out/', filename)))) %>% as.data.frame
+print(df)
+```
+
+```{r}
+config_updates = df %>% filter(type == 'LINK_CONFIG_UPDATE')
+status = df %>% filter(type == 'STATUS')
+```
+
+```{r}
+buffer_events = df %>% filter(type=='BUFFER_EMPTY' | type=='BUFFER_LOADED')
+# TODO: filter out columns
+#buffer_events %>% select(timestamp, type, 'data$mediaType')
+stalled_areas = data.frame()
+stalled_times = 0
+stalled_start = 0
+for (i in 1:nrow(buffer_events)) {
+  if (buffer_events[i,]$type == 'BUFFER_EMPTY') {
+    stalled_times = stalled_times + 1
+    if (stalled_times == 1) {
+      stalled_start = buffer_events[i,]$timestamp
+    }
+  }
+  else {
+    stalled_times = stalled_times - 1
+    if (stalled_times == 0) {
+      stalled_end = buffer_events[i,]$timestamp
+      stalled_areas <- rbind(stalled_areas, data.frame(start=stalled_start, end=stalled_end))  
+    }
+  }
+}
+```
+
+
+```{r}
+scaleFactor <- max(config_updates$data$bw) / max(status$data$videoBuffer) * 3
+
+ggplot() +
+  # Bandwidth
+  geom_area(data=config_updates, aes(x=timestamp, y=data$bw/scaleFactor, color='Bandwidth'), linetype='dashed', alpha=0.15) +
+  # Media bitrate
+  geom_hline(aes(yintercept=(3.5+0.128)/scaleFactor, color='Media bitrate'), linetype='dashed') +
+  # Buffer size AUDIO
+  geom_step(data=status, aes(x=timestamp, y=data$audioBuffer, color='Buffer size (audio)'), alpha=0.5) +
+  # Buffer size VIDEO
+  geom_step(data=status, aes(x=timestamp, y=data$videoBuffer, color='Buffer size (video)')) +
+  # Stalled areas
+  geom_rect(data=stalled_areas, aes(xmin=start, xmax=end, ymin=0, ymax=Inf, fill='Playback stalled'), alpha=0.15) +
+  # Stall start line
+  geom_vline(data=stalled_areas, aes(xintercept=start), linetype='dashed', alpha=0.2, color='red') +
+  # Stall end line
+  geom_vline(data=stalled_areas, aes(xintercept=end), linetype='dashed', alpha=0.2, color='forestgreen') +
+  scale_color_manual(
+    values = c(
+      'Bandwidth'='gray', 
+      'Buffer size (video)'='black',
+      'Buffer size (audio)'='darkorchid',
+      'Media bitrate'='orange'
+    )
+  ) +
+  scale_fill_manual(
+    values = c('Playback stalled'='red')
+  ) +
+  labs(
+    color='',
+    fill='',
+    x='Time',
+    y='Seconds',
+    title=filename
+  ) +
+  theme_bw() +
+  theme(
+    legend.position = 'bottom',
+    panel.grid = element_blank(),
+  ) +
+  scale_x_continuous(
+    breaks=seq(0,max(config_updates$timestamp),10)
+  ) +
+  scale_y_continuous(
+    sec.axis = sec_axis(~ . * scaleFactor, name = "Mbps", breaks=seq(0, max(config_updates$data$bw), 2))
+  )
+```
+
+```{r}
+ggplot() +
+  geom_step(data=status, aes(x=timestamp, y=data$latency), color='dodgerblue3', size=0.75) +
+  xlab('Time (s)') +
+  ylab('Live latency (s)')
+```
+

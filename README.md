@@ -12,15 +12,56 @@ Not my choice 🥹. The emulation is run in a Chromium instance which only [ship
 
 What about using Chrome instead of Chromium? Unfortunately I'm on ARM and Chrome provides no builds for Linux ARM64 at the moment.
 
-## Instructions
+## How to run
 
-- Install [ComNetsEmu](https://github.com/stevelorenz/comnetsemu), start the Vagrant VM and SSH into it
-- Run `./build.sh`
-- Run `./start.sh`
+- Install [ComNetsEmu](https://github.com/stevelorenz/comnetsemu).
+
+- Clone this repository inside the `comnetsemu` directory:
+
+```shell
+git clone https://github.com/matteocontrini/thesis-testbed.git testbed
+```
+
+- Start the Vagrant machine:
+
+```shell
+vagrant up
+```
+
+- Start a shell:
+
+```shell
+vagrant ssh
+```
+
+- Build the Docker images and start the emulation:
+
+```shell
+cd comnetsemu/testbed
+./build.sh
+./start.sh
+```
+
+### Note for Apple Silicon users
+
+ComNetsEmu currently doesn't work if you're using an **Apple Silicon** machine. To make it work, install Parallels Desktop and modify the Vagrantfile by adding the following configuration block:
+
+```
+BOX_PARALLELS = "jeffnoxon/ubuntu-20.04-arm64"
+
+# ...
+
+config.vm.provider "parallels" do |prl, override|
+   override.vm.box = BOX_PARALLELS
+   prl.name = VM_NAME
+   prl.cpus = CPUS
+   prl.memory = RAM
+end
+```
 
 ## Analysis
 
-TODO
+Use the R notebook in the `analysis` directory. 
 
 ## Development setup
 

@@ -1,6 +1,3 @@
-import os
-import signal
-import sys
 import threading
 
 from bottle import request, Bottle
@@ -39,9 +36,10 @@ class ApiServer:
 
     def update_link_config(self):
         bw = request.json.get('bw')
-        delay = request.json.get('delay')
+        rtt = request.json.get('rtt')
+        delay = f'{int(rtt / 4)}ms'
         loss = request.json.get('loss')
-        info(f'\n*** [API] Setting bandwidth={bw} delay={delay} loss={loss}\n')
+        info(f'\n*** [API] Setting bandwidth={bw} rtt={rtt} loss={loss}\n')
         self.link.intf1.config(bw=bw, delay=delay, loss=loss)
         self.link.intf2.config(bw=bw, delay=delay, loss=loss)
         return 'OK'

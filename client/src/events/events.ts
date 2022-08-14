@@ -14,17 +14,17 @@ type BufferEventData = {
 
 type LinkConfigUpdateEventData = {
     bw: number;
-    delay: string;
+    rtt: number;
     loss: number;
 }
 
 type Event = {
-    timestamp: Date;
+    timestamp: number;
     type: 'BUFFER_EMPTY' | 'BUFFER_LOADED' | 'STATUS' | 'LINK_CONFIG_UPDATE' | 'STOP';
     data?: StatusEventData | BufferEventData | LinkConfigUpdateEventData;
 }
 
-const events: Event[] = [];
+let events: Event[] = [];
 
 export function logEvent(event: Event) {
     events.push(event);
@@ -37,15 +37,23 @@ export function logEvent(event: Event) {
             color = chalk.cyan;
             break
         case 'BUFFER_EMPTY':
-            color = chalk.yellow;
+            color = chalk.red;
+            break
+        case 'BUFFER_LOADED':
+            color = chalk.yellow
             break
     }
-    console.log(`[${event.timestamp.toLocaleTimeString()}] ${color(event.type)} ${JSON.stringify(event.data) ?? ''}`);
+
+    console.log(`[${event.timestamp.toFixed(3)}] ${color(event.type)} ${JSON.stringify(event.data) ?? ''}`);
 }
 
-export async function saveEvents() {
+export function resetEvents() {
+    events = [];
+}
+
+export async function saveEvents(name: string) {
     console.log('Saving events to file');
-    const file = path.resolve(__dirname, '../../out/player_events.json');
+    const file = path.resolve(__dirname, `../../out/experiment_${name}.json`);
     const data = JSON.stringify(events);
     await fs.writeFile(file, data);
 }

@@ -1,8 +1,5 @@
-import os
 import signal
 import sys
-import threading
-from io import StringIO
 from os import getcwd
 
 import pyroute2
@@ -13,9 +10,6 @@ from mininet.log import info, setLogLevel
 from mininet.node import Controller
 
 from api import ApiServer
-
-LINK_DEFAULT_BANDWIDTH = 10
-LINK_DEFAULT_DELAY = '15ms'
 
 
 def create_topology():
@@ -45,7 +39,7 @@ def create_topology():
 
     info('*** Adding links\n')
     net.addLink(h1, s1, bw=100, delay='0ms')
-    link: TCLink = net.addLink(s1, s2, bw=LINK_DEFAULT_BANDWIDTH, delay=LINK_DEFAULT_DELAY)
+    link: TCLink = net.addLink(s1, s2, bw=100, delay='10ms')
     net.addLink(s2, h2, bw=100, delay='0ms')
 
     info('\n*** Starting network\n')
@@ -62,6 +56,8 @@ def create_topology():
 
     print('*** Updating h1 hosts file\n')
     h1.cmd(f'echo "{h2.IP()} cdn.local" >> /etc/hosts')
+
+    # TODO parametrize CDN domain
 
     # Create live video source container
     mgr.addContainer(

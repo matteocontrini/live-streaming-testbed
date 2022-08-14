@@ -3,6 +3,7 @@ import {z} from 'zod';
 import superjson from 'superjson';
 import {logEvent} from '../events/events';
 import {startExperiments} from '../experiments/runner';
+import {getTimestamp} from '../events/timer';
 
 export const appRouter = trpc
     .router()
@@ -14,7 +15,7 @@ export const appRouter = trpc
         }),
         async resolve({input}) {
             logEvent({
-                timestamp: input.timestamp,
+                timestamp: getTimestamp(),
                 type: 'BUFFER_EMPTY',
                 data: {
                     mediaType: input.mediaType
@@ -30,7 +31,7 @@ export const appRouter = trpc
         }),
         async resolve({input}) {
             logEvent({
-                timestamp: input.timestamp,
+                timestamp: getTimestamp(),
                 type: 'BUFFER_LOADED',
                 data: {
                     mediaType: input.mediaType
@@ -48,7 +49,7 @@ export const appRouter = trpc
         }),
         async resolve({input}) {
             logEvent({
-                timestamp: input.timestamp,
+                timestamp: getTimestamp(),
                 type: 'STATUS',
                 data: {
                     videoBuffer: input.videoBuffer,

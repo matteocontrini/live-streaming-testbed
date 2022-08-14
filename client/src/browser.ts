@@ -1,5 +1,6 @@
 import path from 'path';
 import puppeteer from 'puppeteer';
+import chalk from 'chalk';
 
 const DEBUG = false;
 
@@ -24,9 +25,9 @@ export async function startBrowser() {
     // await page.tracing.start({path: '/out/trace.json', categories: ['netlog']});
 
     page
-        .on('pageerror', ({message}) => console.log(`[PAGE_ERROR] ${message}`))
+        .on('pageerror', ({message}) => console.log(`[${chalk.red('PAGE_ERROR')}] ${message}`))
         .on('requestfailed', request =>
-            console.log(`[REQ_FAILED] ${request.failure().errorText} ${request.url()}`));
+            console.log(`[${chalk.red('REQ_FAILED')}] ${request.failure().errorText} ${request.url()}`));
 
     if (DEBUG) {
         await page.setRequestInterception(true);

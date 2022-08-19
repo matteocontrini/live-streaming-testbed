@@ -16,9 +16,7 @@ export const appRouter = trpc
             logEvent({
                 timestamp: getTimestamp(),
                 type: 'BUFFER_EMPTY',
-                data: {
-                    mediaType: input.mediaType
-                }
+                data: input
             });
             return true;
         },
@@ -31,9 +29,7 @@ export const appRouter = trpc
             logEvent({
                 timestamp: getTimestamp(),
                 type: 'BUFFER_LOADED',
-                data: {
-                    mediaType: input.mediaType
-                }
+                data: input
             });
             return true;
         },
@@ -61,16 +57,13 @@ export const appRouter = trpc
             videoBuffer: z.number(),
             audioBuffer: z.number(),
             latency: z.number().or(z.nan()),
+            rate: z.number()
         }),
         async resolve({input}) {
             logEvent({
                 timestamp: getTimestamp(),
                 type: 'STATUS',
-                data: {
-                    videoBuffer: input.videoBuffer,
-                    audioBuffer: input.audioBuffer,
-                    latency: input.latency
-                }
+                data: input
             });
             return true;
         }

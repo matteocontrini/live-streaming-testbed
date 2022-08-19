@@ -137,8 +137,11 @@ Live latency plot:
 
 ```{r}
 ggplot() +
+  # Live latency
   geom_line(data=status, aes(x=timestamp, y=data$latency, color='Live latency'), size=0.75) +
-  scale_color_manual(name='', values=c('Live latency'='black')) +
+  # Playback rate
+  geom_line(data=status, aes(x=timestamp, y=data$rate, color='Playback rate'), size=0.5) +
+  scale_color_manual(name='', values=c('Live latency'='black', 'Playback rate'='red')) +
   # Stalled areas
   geom_rect(data=stalled_areas, aes(xmin=start, xmax=end, ymin=0, ymax=Inf, fill='Playback stalled'), alpha=0.15) +
   scale_fill_manual(
@@ -170,6 +173,9 @@ ggplot() +
   ) +
   scale_x_continuous(
     breaks=seq(0, max(status$timestamp), 10)
+  ) +
+  scale_y_continuous(
+    breaks=seq(0, ceiling(max(status$data$latency, na.rm=TRUE)), 1)
   )
 ```
 

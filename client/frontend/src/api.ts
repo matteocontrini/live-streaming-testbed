@@ -27,11 +27,12 @@ export async function sendPlaybackResumedEvent() {
     await client.mutation('sendPlaybackResumed');
 }
 
-export async function sendStatus(videoBuffer: number, audioBuffer: number, latency: number) {
+export async function sendStatus(videoBuffer: number, audioBuffer: number, latency: number, rate: number) {
     await client.mutation('sendStatus', {
         videoBuffer,
         audioBuffer,
         latency,
+        rate
     });
 }
 

@@ -44,8 +44,9 @@ class EventsCollector {
         const videoBuffer = this.player.getDashMetrics().getCurrentBufferLevel('video');
         const audioBuffer = this.player.getDashMetrics().getCurrentBufferLevel('audio');
         const latency = this.player.getCurrentLiveLatency();
-        console.log(`video=${videoBuffer} | audio=${audioBuffer} | latency=${latency}`);
-        await api.sendStatus(videoBuffer, audioBuffer, latency);
+        const rate = this.player.getPlaybackRate();
+        console.log(`video=${videoBuffer} | audio=${audioBuffer} | latency=${latency} | rate = ${rate}`);
+        await api.sendStatus(videoBuffer, audioBuffer, latency, rate);
     }
 }
 

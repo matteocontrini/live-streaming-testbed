@@ -6,6 +6,7 @@ type StatusEventData = {
     videoBuffer: number;
     audioBuffer: number;
     latency: number | typeof NaN;
+    rate: number;
 }
 
 type BufferEventData = {

@@ -17,15 +17,19 @@ type NetworkPatternPoint = {
 
 class Experiment {
     name: string;
+    pattern: string;
+    liveCatchup: boolean;
 
-    constructor(name: string) {
+    constructor(name: string, pattern: string, liveCatchup: boolean = false) {
         this.name = name;
+        this.pattern = pattern;
+        this.liveCatchup = liveCatchup;
     }
 
     async run() {
         const pattern = await this.loadNetworkPattern();
         resetTimer();
-        await resetPlayer();
+        await resetPlayer(this.liveCatchup);
         await resetEvents();
 
         for (const point of pattern) {
@@ -37,7 +41,7 @@ class Experiment {
     }
 
     private async loadNetworkPattern(): Promise<NetworkPatternPoint[]> {
-        let filePath = path.resolve(__dirname, `../assets/patterns/${this.name}.csv`);
+        let filePath = path.resolve(__dirname, `../assets/patterns/${this.pattern}.csv`);
         let csv = await fs.readFile(filePath, 'utf8');
         return Papa.parse<NetworkPatternPoint>(csv, {
             header: true,
@@ -48,8 +52,10 @@ class Experiment {
 }
 
 const experiments = [
-    new Experiment('lte'),
-    new Experiment('hspa+'),
+    new Experiment('lte', 'lte'),
+    new Experiment('lte_catchup', 'lte', true),
+    new Experiment('hspa+', 'hspa+'),
+    new Experiment('hspa+_catchup', 'hspa+', true),
 ];
 
 export default experiments;

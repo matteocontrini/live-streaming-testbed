@@ -19,6 +19,6 @@ ws.addEventListener('message', (event) => {
     const message = JSON.parse(event.data);
     console.log(message);
     if (message.type == 'reset') {
-        ui.resetPlayer(message.source);
+        ui.resetPlayer(message.source, message.liveCatchup);
     }
 });

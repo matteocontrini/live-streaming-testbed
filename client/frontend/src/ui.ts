@@ -29,6 +29,13 @@ export function createPlayer(): MediaPlayerClass {
     return player;
 }
 
-export function resetPlayer(url: string) {
+export function resetPlayer(url: string, liveCatchup: boolean) {
     player.attachSource(url);
+    player.updateSettings({
+        streaming: {
+            liveCatchup: {
+                enabled: liveCatchup
+            }
+        }
+    });
 }

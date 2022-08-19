@@ -7,9 +7,9 @@ import {getTimestamp} from '../events/timer';
 const API_HOST = process.env.API_HOST || 'localhost:3000';
 const PREFIX = `http://${API_HOST}`;
 
-async function resetPlayer() {
+async function resetPlayer(liveCatchup: boolean) {
     const url = 'https://cdn.local/manifest.mpd';
-    const msg = {type: 'reset', source: url};
+    const msg = {type: 'reset', source: url, liveCatchup};
     await sendMessage(msg);
 }
 

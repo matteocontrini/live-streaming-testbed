@@ -18,7 +18,7 @@ library(here)
 Load the data:
 
 ```{r}
-expname = 'hspa+_catchup'
+expname = 'hspa+_h3'
 filename = paste0('experiment_', expname, '.json')
 path = here() %>% str_remove('analysis') %>% paste0('client/out/', filename)
 df <- fromJSON(readLines(path)) %>% as.data.frame

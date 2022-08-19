@@ -3,12 +3,24 @@ import chalk from 'chalk';
 import {logEvent} from '../events/events';
 import {sendMessage} from '../api/server';
 import {getTimestamp} from '../events/timer';
+import HttpVersion from './httpversion';
 
 const API_HOST = process.env.API_HOST || 'localhost:3000';
 const PREFIX = `http://${API_HOST}`;
 
-async function resetPlayer(liveCatchup: boolean) {
-    const url = 'https://cdn.local/manifest.mpd';
+async function resetPlayer(liveCatchup: boolean, httpVersion: HttpVersion) {
+    let url;
+    switch (httpVersion) {
+        case HttpVersion.HTTP1_1:
+            url = 'http://cdn.local/manifest.mpd';
+            break;
+        case HttpVersion.HTTP2:
+            url = 'https://cdn.local/manifest.mpd';
+            break;
+        case HttpVersion.HTTP3:
+            url = 'https://cdn.local:444/manifest.mpd';
+            break;
+    }
     const msg = {type: 'reset', source: url, liveCatchup};
     await sendMessage(msg);
 }

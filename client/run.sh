@@ -17,7 +17,7 @@ certutil -d sql:$HOME/.pki/nssdb -L
 
 while true; do
     echo "Waiting for manifest.mpd to be available..."
-    curl -s -f -o /dev/null -k https://cdn.local/manifest.mpd && break
+    curl -s -f -o /dev/null http://cdn.local/manifest.mpd && break
     sleep 1
 done
 

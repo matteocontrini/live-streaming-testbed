@@ -5,6 +5,7 @@ import {sleep} from '../utils';
 import {resetEvents, saveEvents} from '../events/events';
 import path from 'path';
 import {resetTimer} from '../events/timer';
+import HttpVersion from './httpversion';
 
 
 type NetworkPatternPoint = {
@@ -19,17 +20,22 @@ class Experiment {
     name: string;
     pattern: string;
     liveCatchup: boolean;
+    httpVersion: HttpVersion;
 
-    constructor(name: string, pattern: string, liveCatchup: boolean = false) {
+    constructor(name: string,
+                pattern: string,
+                liveCatchup: boolean = false,
+                httpVersion: HttpVersion = HttpVersion.HTTP3) {
         this.name = name;
         this.pattern = pattern;
         this.liveCatchup = liveCatchup;
+        this.httpVersion = httpVersion;
     }
 
     async run() {
         const pattern = await this.loadNetworkPattern();
         resetTimer();
-        await resetPlayer(this.liveCatchup);
+        await resetPlayer(this.liveCatchup, this.httpVersion);
         await resetEvents();
 
         for (const point of pattern) {
@@ -52,9 +58,13 @@ class Experiment {
 }
 
 const experiments = [
-    new Experiment('lte', 'lte'),
+    new Experiment('lte_h1', 'lte', false, HttpVersion.HTTP1_1),
+    new Experiment('lte_h2', 'lte', false, HttpVersion.HTTP2),
+    new Experiment('lte_h3', 'lte', false, HttpVersion.HTTP3),
+    new Experiment('hspa+_h1', 'hspa+', false, HttpVersion.HTTP1_1),
+    new Experiment('hspa+_h2', 'hspa+', false, HttpVersion.HTTP2),
+    new Experiment('hspa+_h3', 'hspa+', false, HttpVersion.HTTP3),
     new Experiment('lte_catchup', 'lte', true),
-    new Experiment('hspa+', 'hspa+'),
     new Experiment('hspa+_catchup', 'hspa+', true),
 ];
 

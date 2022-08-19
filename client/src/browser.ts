@@ -12,7 +12,7 @@ export async function startBrowser() {
             '--no-sandbox',
             '--disable-setuid-sandbox',
             '--enable-quic',
-            '--origin-to-force-quic-on=cdn.local:443',
+            '--origin-to-force-quic-on=cdn.local:444',
             //'--ignore-certificate-errors',
             // '--ignore-certificate-errors-spki-list=UKSGn1BWV+byKw1SyRSFQjtNpYIetyS0P349jea/6T4=',
             // '--log-net-log=/out/netlog.json',

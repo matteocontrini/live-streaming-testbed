@@ -18,7 +18,8 @@ library(here)
 Load the data:
 
 ```{r}
-filename = 'experiment_hspa+.json'
+expname = 'hspa+_catchup'
+filename = paste0('experiment_', expname, '.json')
 path = here() %>% str_remove('analysis') %>% paste0('client/out/', filename)
 df <- fromJSON(readLines(path)) %>% as.data.frame
 print(df)
@@ -53,6 +54,16 @@ for (i in 1:nrow(playback_events)) {
   }
 }
 ```
+
+Number of stalled events: `r nrow(stalled_areas)`.
+
+```{r}
+stall_durations = stalled_areas$end - stalled_areas$start
+summary(stall_durations)
+stall_duration = sum(stall_durations)
+```
+
+Total stall duration: `r stall_duration`.
 
 Buffer health plot:
 

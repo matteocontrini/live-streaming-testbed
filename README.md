@@ -14,7 +14,7 @@ What about using Chrome instead of Chromium? Unfortunately I'm on ARM and Chrome
 
 ## How to run
 
-- Install [ComNetsEmu](https://github.com/stevelorenz/comnetsemu).
+- Install [ComNetsEmu](https://github.com/stevelorenz/comnetsemu)
 
 - Clone this repository inside the `comnetsemu` directory:
 

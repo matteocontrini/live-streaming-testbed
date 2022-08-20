@@ -39,7 +39,7 @@ class Experiment {
         await resetEvents();
 
         for (const point of pattern) {
-            await updateLinkConfig(point.dl, point.rtt, point.loss);
+            await updateLinkConfig(point.dl, this.randomizeLatency(point.rtt), point.loss);
             await sleep(1);
         }
 
@@ -54,6 +54,11 @@ class Experiment {
             dynamicTyping: true,
             skipEmptyLines: true
         }).data;
+    }
+
+    private randomizeLatency(value: number): number {
+        // +/- 10
+        return value + Math.floor(Math.random() * 30) - 15;
     }
 }
 

@@ -9,3 +9,5 @@ cd ../client
 docker build -t client .
 
 docker image prune -f
+
+sudo pip3 install bottle

@@ -1,4 +1,4 @@
-import dashjs, {BufferEvent} from 'dashjs';
+import dashjs, {BufferEvent, FragmentLoadingCompletedEvent} from 'dashjs';
 import {MediaPlayerClass} from 'dashjs';
 import * as api from './api';
 
@@ -17,6 +17,7 @@ class EventsCollector {
         this.player.on(dashjs.MediaPlayer.events.BUFFER_LOADED, this.onBufferLoaded);
         this.player.on(dashjs.MediaPlayer.events.PLAYBACK_WAITING, this.onPlaybackWaiting);
         this.player.on(dashjs.MediaPlayer.events.PLAYBACK_PLAYING, this.onPlaybackPlaying);
+        this.player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_COMPLETED, this.onFragmentLoadingCompleted);
         this.interval = setInterval(this.tick.bind(this), INTERVAL);
     }
 
@@ -38,6 +39,21 @@ class EventsCollector {
     async onPlaybackPlaying() {
         console.log('Playback resumed');
         await api.sendPlaybackResumedEvent();
+    }
+
+    async onFragmentLoadingCompleted(e: FragmentLoadingCompletedEvent) {
+        if (e.request.type == 'InitializationSegment') {
+            return;
+        }
+        console.log('Fragment loaded: ' + e.request.url);
+        await api.sendFragmentLoadedEvent(
+            e.request.url,
+            e.request.mediaType,
+            e.request.startTime,
+            e.request.duration,
+            e.request.requestStartDate,
+            e.request.requestEndDate!
+        );
     }
 
     async tick() {

@@ -1,5 +1,5 @@
 import path from 'path';
-import puppeteer from 'puppeteer';
+import puppeteer, {ConsoleMessage, HTTPRequest, HTTPResponse} from 'puppeteer';
 import chalk from 'chalk';
 
 const DEBUG = false;
@@ -32,15 +32,15 @@ export async function startBrowser() {
     if (DEBUG) {
         await page.setRequestInterception(true);
         page
-            .on('console', message =>
+            .on('console', (message: ConsoleMessage) =>
                 console.log(`[CONSOLE][${message.type().toUpperCase()}] ${message.text()}`))
-            .on('request', request => {
+            .on('request', (request: HTTPRequest) => {
                 if (!request.url().startsWith('data:')) {
                     console.log(`[REQUEST] ${request.url()}`);
                 }
                 request.continue();
             })
-            .on('response', response => {
+            .on('response', (response: HTTPResponse) => {
                 if (!response.url().startsWith('data:')) {
                     console.log(`[RESPONSE] ${response.status()} ${response.url()}`)
                 }
@@ -51,6 +51,7 @@ export async function startBrowser() {
     console.log(version);
 
     await page.goto('http://localhost:3000');
+
     await page.waitForTimeout(2000);
 
     await page.click('#ready');
@@ -66,5 +67,4 @@ export async function startBrowser() {
 
     // TODO: close when stopping
     // await browser.close();
-    // server.close();
 }

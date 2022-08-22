@@ -19,11 +19,21 @@ type LinkConfigUpdateEventData = {
     loss: number;
 }
 
+type FragmentEventData = {
+    url: string;
+    mediaType: string;
+    startTime: number;
+    duration: number;
+    requestStartDate: Date;
+    requestEndDate: Date;
+}
+
 type Event = {
     timestamp: number;
     type: 'BUFFER_EMPTY' | 'BUFFER_LOADED' | 'PLAYBACK_STALLED' | 'PLAYBACK_RESUMED' |
+        'FRAGMENT_REQUESTED' | 'FRAGMENT_LOADED' |
         'STATUS' | 'LINK_CONFIG_UPDATE' | 'STOP';
-    data?: StatusEventData | BufferEventData | LinkConfigUpdateEventData;
+    data?: StatusEventData | BufferEventData | LinkConfigUpdateEventData | FragmentEventData;
 }
 
 let events: Event[] = [];

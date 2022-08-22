@@ -8,6 +8,13 @@ import {getTimestamp} from '../events/timer';
 export const appRouter = trpc
     .router()
     .transformer(superjson)
+    .mutation('startExperiments', {
+        async resolve() {
+            // noinspection ES6MissingAwait
+            startExperiments();
+            return true;
+        }
+    })
     .mutation('sendBufferEmpty', {
         input: z.object({
             mediaType: z.string(),
@@ -68,12 +75,24 @@ export const appRouter = trpc
             return true;
         }
     })
-    .mutation('startExperiments', {
-        async resolve() {
-            // noinspection ES6MissingAwait
-            startExperiments();
+    .mutation('sendFragmentLoaded', {
+        input: z.object({
+            url: z.string(),
+            mediaType: z.string(),
+            startTime: z.number(),
+            duration: z.number(),
+            requestStartDate: z.date(),
+            requestEndDate: z.date()
+        }),
+        async resolve({input}) {
+            logEvent({
+                timestamp: getTimestamp(),
+                type: 'FRAGMENT_LOADED',
+                data: input
+            });
             return true;
         }
-    });
+    })
+;
 
 export type AppRouter = typeof appRouter;

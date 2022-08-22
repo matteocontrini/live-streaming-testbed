@@ -36,6 +36,17 @@ export async function sendStatus(videoBuffer: number, audioBuffer: number, laten
     });
 }
 
+export async function sendFragmentLoadedEvent(url: string, mediaType: string, startTime: number, duration: number, requestStartDate: Date, requestEndDate: Date) {
+    await client.mutation('sendFragmentLoaded', {
+        url,
+        mediaType,
+        startTime,
+        duration,
+        requestStartDate,
+        requestEndDate
+    });
+}
+
 export async function startExperiments() {
     await client.mutation('startExperiments');
 }

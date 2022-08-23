@@ -2,7 +2,7 @@
 
 >⚠️ Work in progress :)
 
-This repository contains a testbed for emulating a live video streaming setup based on MPEG-DASH over resource-constrained networks.
+This repository contains a testbed for emulating a live video streaming setup based on MPEG-DASH over resource-constrained networks. It was built for my master thesis.
 
 The testbed is based on the [ComNetsEmu](https://github.com/stevelorenz/comnetsemu) emulator.
 
@@ -19,7 +19,7 @@ What about using Chrome instead of Chromium? Unfortunately I'm on ARM and Chrome
 - Clone this repository inside the `comnetsemu` directory:
 
 ```shell
-git clone https://github.com/matteocontrini/thesis-testbed.git testbed
+git clone https://github.com/matteocontrini/live-streaming-testbed.git testbed
 ```
 
 - Start the Vagrant machine:

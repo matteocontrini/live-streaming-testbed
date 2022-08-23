@@ -18,7 +18,7 @@ RUN apt-get update -y \
         libnss3-tools \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone --recurse-submodules https://github.com/h2o/h2o.git
+RUN git clone --recurse-submodules https://github.com/matteocontrini/h2o.git
 
 RUN mkdir -p /src/h2o/build && \
     cd /src/h2o/build && \

@@ -13,16 +13,14 @@ export async function startBrowser() {
             '--disable-setuid-sandbox',
             '--enable-quic',
             '--origin-to-force-quic-on=cdn.local:444',
-            //'--ignore-certificate-errors',
+            // '--ignore-certificate-errors',
             // '--ignore-certificate-errors-spki-list=UKSGn1BWV+byKw1SyRSFQjtNpYIetyS0P349jea/6T4=',
-            // '--log-net-log=/out/netlog.json',
+            // '--log-net-log=' + path.resolve(__dirname, '../out/netlog.json'),
             ...additionalArgs
         ]
     });
 
     const page = await browser.newPage();
-
-    // await page.tracing.start({path: '/out/trace.json', categories: ['netlog']});
 
     page
         .on('pageerror', ({message}) => console.log(`[${chalk.red('PAGE_ERROR')}] ${message}`))
@@ -57,8 +55,6 @@ export async function startBrowser() {
     await page.click('#ready');
 
     await page.waitForTimeout(2000);
-
-    // await page.tracing.stop();
 
     while (true) {
         await page.screenshot({path: path.resolve(__dirname, '../out/screenshot.png')});

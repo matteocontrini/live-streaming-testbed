@@ -1,0 +1,33 @@
+---
+title: "R Notebook"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(jsonlite)
+data = fromJSON('/Users/mcont/Downloads/chrome-net-export-log-2022-08-21.netlog.json', flatten=TRUE)
+types = data$constants$logEventTypes
+types_map = c()
+for (type in names(types)) {
+  types_map[types[[type]]] = type
+}
+
+events = data$events %>% as.tibble()
+
+for (i in 1:nrow(events)) {
+  if (events[[i,'type']] == 0) {
+    next
+  }
+  events[i,'t'] = types_map[events[[i,'type']]]
+}
+
+View(events %>% 
+       select(t, time, source.id, phase) %>%
+       filter(source.id == 17920)
+     
+     )
+
+```
+

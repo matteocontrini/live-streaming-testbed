@@ -24,8 +24,8 @@ class Experiment {
 
     constructor(name: string,
                 pattern: string,
-                liveCatchup: boolean = false,
-                httpVersion: HttpVersion = HttpVersion.HTTP3) {
+                httpVersion: HttpVersion,
+                liveCatchup: boolean = false) {
         this.name = name;
         this.pattern = pattern;
         this.liveCatchup = liveCatchup;
@@ -63,14 +63,14 @@ class Experiment {
 }
 
 const experiments = [
-    new Experiment('lte_h1', 'lte', false, HttpVersion.HTTP1_1),
-    new Experiment('lte_h2', 'lte', false, HttpVersion.HTTP2),
-    new Experiment('lte_h3', 'lte', false, HttpVersion.HTTP3),
-    new Experiment('hspa+_h1', 'hspa+', false, HttpVersion.HTTP1_1),
-    new Experiment('hspa+_h2', 'hspa+', false, HttpVersion.HTTP2),
-    new Experiment('hspa+_h3', 'hspa+', false, HttpVersion.HTTP3),
-    new Experiment('lte_catchup', 'lte', true),
-    new Experiment('hspa+_catchup', 'hspa+', true),
+    new Experiment('lte_h1', 'lte', HttpVersion.HTTP1_1),
+    new Experiment('lte_h2', 'lte', HttpVersion.HTTP2),
+    new Experiment('lte_h3', 'lte', HttpVersion.HTTP3),
+    new Experiment('hspa+_h1', 'hspa+', HttpVersion.HTTP1_1),
+    new Experiment('hspa+_h2', 'hspa+', HttpVersion.HTTP2),
+    new Experiment('hspa+_h3', 'hspa+', HttpVersion.HTTP3),
+    new Experiment('lte_catchup', 'lte', HttpVersion.HTTP3, true),
+    new Experiment('hspa+_catchup', 'hspa+', HttpVersion.HTTP3, true),
 ];
 
 export default experiments;

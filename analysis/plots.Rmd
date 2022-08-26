@@ -18,7 +18,7 @@ library(here)
 Load the data:
 
 ```{r}
-expname = 'lte_h2'
+expname = 'lte_h3'
 filename = paste0('experiment_', expname, '.json')
 path = here() %>% str_remove('analysis') %>% paste0('client/out/', filename)
 df <- fromJSON(readLines(path), flatten=TRUE) %>% as.data.frame
@@ -214,6 +214,12 @@ ggplot() +
   ) +
   coord_flip() +
   scale_x_reverse() +
+  labs(
+    y = 'Time (s)',
+    x = '',
+    title = paste0('Waterfall: ', filename),
+    fill = ''
+  ) +
   theme_minimal() +
   theme(
     legend.position = 'bottom',

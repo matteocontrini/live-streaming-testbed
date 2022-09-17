@@ -20,7 +20,7 @@ ws.addEventListener('message', (event) => {
     console.log(message);
 
     if (message.type == 'start') {
-        ui.startPlayer(message.source, message.liveCatchup);
+        ui.startPlayer(message.source, message.liveCatchup, message.minBitrate);
     } else if (message.type == 'reset') {
         ui.resetPlayer();
     }

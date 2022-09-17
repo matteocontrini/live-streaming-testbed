@@ -8,7 +8,7 @@ import HttpVersion from './httpversion';
 const API_HOST = process.env.API_HOST || 'localhost:3000';
 const PREFIX = `http://${API_HOST}`;
 
-async function startPlayer(liveCatchup: boolean, httpVersion: HttpVersion) {
+async function startPlayer(liveCatchup: boolean, httpVersion: HttpVersion, minBitrate: number) {
     let url;
     switch (httpVersion) {
         case HttpVersion.HTTP1_1:
@@ -21,7 +21,7 @@ async function startPlayer(liveCatchup: boolean, httpVersion: HttpVersion) {
             url = 'https://cdn.local:444/manifest.mpd';
             break;
     }
-    const msg = {type: 'start', source: url, liveCatchup};
+    const msg = {type: 'start', source: url, liveCatchup, minBitrate};
     await sendMessage(msg);
 }
 

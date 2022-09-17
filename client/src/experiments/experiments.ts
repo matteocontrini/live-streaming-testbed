@@ -19,23 +19,26 @@ type NetworkPatternPoint = {
 class Experiment {
     name: string;
     pattern: string;
-    liveCatchup: boolean;
     httpVersion: HttpVersion;
+    minBitrate: number;
+    liveCatchup: boolean;
 
     constructor(name: string,
                 pattern: string,
                 httpVersion: HttpVersion,
+                minBitrate: number = -1,
                 liveCatchup: boolean = false) {
         this.name = name;
         this.pattern = pattern;
-        this.liveCatchup = liveCatchup;
         this.httpVersion = httpVersion;
+        this.minBitrate = minBitrate;
+        this.liveCatchup = liveCatchup;
     }
 
     async run() {
         const pattern = await this.loadNetworkPattern();
         resetTimer();
-        await startPlayer(this.liveCatchup, this.httpVersion);
+        await startPlayer(this.liveCatchup, this.httpVersion, this.minBitrate);
         await resetEvents();
 
         for (const point of pattern) {
@@ -64,14 +67,14 @@ class Experiment {
 }
 
 const experiments = [
-    new Experiment('lte_h1', 'lte', HttpVersion.HTTP1_1),
-    new Experiment('lte_h2', 'lte', HttpVersion.HTTP2),
-    new Experiment('lte_h3', 'lte', HttpVersion.HTTP3),
-    new Experiment('hspa+_h1', 'hspa+', HttpVersion.HTTP1_1),
-    new Experiment('hspa+_h2', 'hspa+', HttpVersion.HTTP2),
-    new Experiment('hspa+_h3', 'hspa+', HttpVersion.HTTP3),
-    new Experiment('lte_catchup', 'lte', HttpVersion.HTTP3, true),
-    new Experiment('hspa+_catchup', 'hspa+', HttpVersion.HTTP3, true),
+    new Experiment('lte_h1', 'lte', HttpVersion.HTTP1_1, 3000),
+    new Experiment('lte_h2', 'lte', HttpVersion.HTTP2, 3000),
+    new Experiment('lte_h3', 'lte', HttpVersion.HTTP3, 3000),
+    new Experiment('hspa+_h1', 'hspa+', HttpVersion.HTTP1_1, 3000),
+    new Experiment('hspa+_h2', 'hspa+', HttpVersion.HTTP2, 3000),
+    new Experiment('hspa+_h3', 'hspa+', HttpVersion.HTTP3, 3000),
+    new Experiment('lte_catchup', 'lte', HttpVersion.HTTP3, 3000, true),
+    new Experiment('hspa+_catchup', 'hspa+', HttpVersion.HTTP3, 3000, true),
 ];
 
 export default experiments;

@@ -17,7 +17,7 @@ function createPlayer(): MediaPlayerClass {
     return player;
 }
 
-function startPlayer(url: string, liveCatchup: boolean) {
+function startPlayer(url: string, liveCatchup: boolean, minBitrate: number) {
     player.initialize(element);
 
     player.setMute(true);
@@ -32,8 +32,12 @@ function startPlayer(url: string, liveCatchup: boolean) {
             },
             abr: {
                 initialBitrate: {
-                    video: 10000, // start with the highest quality
+                    video: 10000, // always start with the highest quality
                     audio: 1000
+                },
+                minBitrate: {
+                    video: minBitrate,
+                    audio: -1
                 }
             }
         }

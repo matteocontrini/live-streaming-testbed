@@ -22,6 +22,12 @@ export function createPlayer(): MediaPlayerClass {
         streaming: {
             delay: {
                 liveDelayFragmentCount: 2
+            },
+            abr: {
+                initialBitrate: {
+                    video: 10000, // start with the highest quality
+                    audio: 1000
+                }
             }
         }
     });

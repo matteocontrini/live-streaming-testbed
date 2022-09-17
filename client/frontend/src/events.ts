@@ -75,6 +75,9 @@ class EventsCollector {
     }
 
     async tick() {
+        if (!this.player.isReady()) {
+            return;
+        }
         const videoBuffer = this.player.getDashMetrics().getCurrentBufferLevel('video');
         const audioBuffer = this.player.getDashMetrics().getCurrentBufferLevel('audio');
         const latency = this.player.getCurrentLiveLatency();

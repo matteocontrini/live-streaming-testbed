@@ -11,8 +11,8 @@ async function startExperiments() {
         console.log(`Running experiment: ${experiment.name}`);
         console.log('+++++');
         console.log();
+        await sleep(1);
         await experiment.run();
-        await sleep(3);
     }
 
     await stop();

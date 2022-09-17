@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import Papa from 'papaparse';
-import {resetPlayer, updateLinkConfig} from './steps';
+import {resetPlayer, startPlayer, updateLinkConfig} from './steps';
 import {sleep} from '../utils';
 import {resetEvents, saveEvents} from '../events/events';
 import path from 'path';
@@ -35,7 +35,7 @@ class Experiment {
     async run() {
         const pattern = await this.loadNetworkPattern();
         resetTimer();
-        await resetPlayer(this.liveCatchup, this.httpVersion);
+        await startPlayer(this.liveCatchup, this.httpVersion);
         await resetEvents();
 
         for (const point of pattern) {
@@ -43,6 +43,7 @@ class Experiment {
             await sleep(1);
         }
 
+        await resetPlayer();
         await saveEvents(this.name);
     }
 

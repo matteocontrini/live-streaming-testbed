@@ -18,7 +18,10 @@ let ws = new WebSocket(`ws://${window.location.host}/ws`);
 ws.addEventListener('message', (event) => {
     const message = JSON.parse(event.data);
     console.log(message);
-    if (message.type == 'reset') {
-        ui.resetPlayer(message.source, message.liveCatchup);
+
+    if (message.type == 'start') {
+        ui.startPlayer(message.source, message.liveCatchup);
+    } else if (message.type == 'reset') {
+        ui.resetPlayer();
     }
 });

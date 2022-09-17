@@ -1,19 +1,23 @@
 import {MediaPlayer, MediaPlayerClass} from 'dashjs';
 
-export function init() {
+let player: MediaPlayerClass;
+let element: HTMLElement;
+
+function init() {
     document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
         <video id="player" width="600" height="300" controls></video>
         <button id="ready">READY</button>
     `;
 }
 
-let player: MediaPlayerClass;
 
-export function createPlayer(): MediaPlayerClass {
-    let element = document.getElementById('player')!;
-
+function createPlayer(): MediaPlayerClass {
+    element = document.getElementById('player')!;
     player = MediaPlayer().create();
+    return player;
+}
 
+function startPlayer(url: string, liveCatchup: boolean) {
     player.initialize(element);
 
     player.setMute(true);
@@ -22,6 +26,9 @@ export function createPlayer(): MediaPlayerClass {
         streaming: {
             delay: {
                 liveDelayFragmentCount: 2
+            },
+            liveCatchup: {
+                enabled: liveCatchup
             },
             abr: {
                 initialBitrate: {
@@ -32,16 +39,11 @@ export function createPlayer(): MediaPlayerClass {
         }
     });
 
-    return player;
+    player.attachSource(url);
 }
 
-export function resetPlayer(url: string, liveCatchup: boolean) {
-    player.attachSource(url);
-    player.updateSettings({
-        streaming: {
-            liveCatchup: {
-                enabled: liveCatchup
-            }
-        }
-    });
+function resetPlayer() {
+    player.reset();
 }
+
+export {init, createPlayer, startPlayer, resetPlayer};

@@ -1,5 +1,6 @@
 import experiments from './experiments';
 import {stop} from './steps';
+import {sleep} from '../utils';
 
 async function startExperiments() {
     console.log('Starting experiments');
@@ -11,6 +12,7 @@ async function startExperiments() {
         console.log('+++++');
         console.log();
         await experiment.run();
+        await sleep(3);
     }
 
     await stop();

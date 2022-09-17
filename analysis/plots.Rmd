@@ -18,7 +18,7 @@ library(here)
 Load the data:
 
 ```{r}
-expname = 'lte_h3'
+expname = 'hspa+_h3'
 filename = paste0('experiment_', expname, '.json')
 path = here() %>% str_remove('analysis') %>% paste0('client/out/', filename)
 df <- fromJSON(readLines(path), flatten=TRUE) %>% as.data.frame
@@ -32,6 +32,7 @@ config_updates = df %>% filter(type == 'LINK_CONFIG_UPDATE')
 status = df %>% filter(type == 'STATUS')
 buffer_empty_events = df %>% filter(type=='BUFFER_EMPTY')
 buffer_loaded_events = df %>% filter(type=='BUFFER_LOADED')
+rep_switch_events = df %>% filter(type=='REPRESENTATION_SWITCH')
 ```
 
 ```{r}
@@ -79,7 +80,7 @@ ggplot() +
   ) +
   new_scale_color() +
   # Media bitrate
-  geom_hline(aes(yintercept=(3.5+0.128)/scaleFactor, color='Media bitrate'), linetype='dashed') +
+  geom_step(data=rep_switch_events, aes(x=timestamp, y=(data.videoBitrate + data.audioBitrate)/1000/scaleFactor, color='Media bitrate'), linetype='dashed') +
   scale_color_manual(
     name='',
     values=c('Media bitrate'='orange')

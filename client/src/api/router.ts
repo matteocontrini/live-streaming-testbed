@@ -93,6 +93,20 @@ export const appRouter = trpc
             return true;
         }
     })
+    .mutation('sendRepresentationSwitch', {
+        input: z.object({
+            videoBitrate: z.number(),
+            audioBitrate: z.number()
+        }),
+        async resolve({input}) {
+            logEvent({
+                timestamp: getTimestamp(),
+                type: 'REPRESENTATION_SWITCH',
+                data: input
+            });
+            return true;
+        }
+    })
 ;
 
 export type AppRouter = typeof appRouter;

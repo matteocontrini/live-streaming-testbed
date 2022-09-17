@@ -7,6 +7,8 @@ const INTERVAL = 250;
 class EventsCollector {
     interval: NodeJS.Timer | undefined;
     player: MediaPlayerClass;
+    currentVideoBitrate: number | undefined;
+    currentAudioBitrate: number | undefined;
 
     constructor(player: MediaPlayerClass) {
         this.player = player;
@@ -18,6 +20,7 @@ class EventsCollector {
         this.player.on(dashjs.MediaPlayer.events.PLAYBACK_WAITING, this.onPlaybackWaiting);
         this.player.on(dashjs.MediaPlayer.events.PLAYBACK_PLAYING, this.onPlaybackPlaying);
         this.player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_COMPLETED, this.onFragmentLoadingCompleted);
+        this.player.on(dashjs.MediaPlayer.events.REPRESENTATION_SWITCH, this.onRepresentationSwitch.bind(this));
         this.interval = setInterval(this.tick.bind(this), INTERVAL);
     }
 
@@ -54,6 +57,21 @@ class EventsCollector {
             e.request.requestStartDate,
             e.request.requestEndDate!
         );
+    }
+
+    async onRepresentationSwitch(e: any) {
+        if (e.mediaType == 'video') {
+            this.currentVideoBitrate = Math.round(e.currentRepresentation.bandwidth / 1000);
+        } else if (e.mediaType == 'audio') {
+            this.currentAudioBitrate = Math.round(e.currentRepresentation.bandwidth / 1000);
+        }
+
+        if (!this.currentVideoBitrate || !this.currentAudioBitrate) {
+            return;
+        }
+
+        console.log(`Representation switch [${this.currentVideoBitrate} | ${this.currentAudioBitrate}]`);
+        await api.sendRepresentationSwitchEvent(this.currentVideoBitrate, this.currentAudioBitrate);
     }
 
     async tick() {

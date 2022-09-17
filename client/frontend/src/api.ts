@@ -47,6 +47,13 @@ export async function sendFragmentLoadedEvent(url: string, mediaType: string, st
     });
 }
 
+export async function sendRepresentationSwitchEvent(videoBitrate: number, audioBitrate: number) {
+    await client.mutation('sendRepresentationSwitch', {
+        videoBitrate,
+        audioBitrate
+    });
+}
+
 export async function startExperiments() {
     await client.mutation('startExperiments');
 }

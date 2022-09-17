@@ -28,12 +28,18 @@ type FragmentEventData = {
     requestEndDate: Date;
 }
 
+type RepresentationSwitchEventData = {
+    videoBitrate: number;
+    audioBitrate: number;
+}
+
 type Event = {
     timestamp: number;
     type: 'BUFFER_EMPTY' | 'BUFFER_LOADED' | 'PLAYBACK_STALLED' | 'PLAYBACK_RESUMED' |
         'FRAGMENT_REQUESTED' | 'FRAGMENT_LOADED' |
-        'STATUS' | 'LINK_CONFIG_UPDATE' | 'STOP';
-    data?: StatusEventData | BufferEventData | LinkConfigUpdateEventData | FragmentEventData;
+        'STATUS' | 'LINK_CONFIG_UPDATE' | 'STOP' | 'REPRESENTATION_SWITCH';
+    data?: StatusEventData | BufferEventData | LinkConfigUpdateEventData |
+        FragmentEventData | RepresentationSwitchEventData;
 }
 
 let events: Event[] = [];
@@ -54,6 +60,7 @@ export function logEvent(event: Event) {
             break
         case 'BUFFER_LOADED':
         case 'PLAYBACK_RESUMED':
+        case 'REPRESENTATION_SWITCH':
             color = chalk.yellow
             break
     }

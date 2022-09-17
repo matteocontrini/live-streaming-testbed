@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  h2o:
+    build: .
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./www:/h2o/www

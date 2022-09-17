@@ -8,3 +8,4 @@ cdn/www/
 node_modules/
 dist/
 client/out/
+live-source/*.mp4

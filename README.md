@@ -22,6 +22,15 @@ What about using Chrome instead of Chromium? Unfortunately I'm on ARM and Chrome
 git clone https://github.com/matteocontrini/live-streaming-testbed.git testbed
 ```
 
+- Download the video file used for testing (Big Buck Bunny) and encode the renditions:
+
+```shell
+cd testbed/live-source
+wget https://kodi.mirror.garr.it/demo-files/BBB/bbb_sunflower_1080p_60fps_normal.mp4
+./encode.sh
+# The output is a single file named dash.mp4
+```
+
 - Start the Vagrant machine:
 
 ```shell

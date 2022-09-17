@@ -63,7 +63,10 @@ def create_topology():
     mgr.addContainer(
         'live-source', 'h3', 'live-source', None,
         docker_args={
-            'volumes': {getcwd() + '/cdn/www': {'bind': '/live', 'mode': 'rw'}}
+            'volumes': {
+                getcwd() + '/cdn/www': {'bind': '/live/www', 'mode': 'rw'},
+                getcwd() + '/live-source': {'bind': '/live/source', 'mode': 'ro'},
+            }
         }
     )
 

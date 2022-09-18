@@ -1,9 +1,9 @@
 #!/bin/bash
 
 echo "Hello!"
+echo "Waiting for rootCA.pem to be available..."
 
 while true; do
-    echo "Waiting for rootCA.pem to be available..."
     sleep 1
     wget -q http://cdn.local/certs/rootCA.pem && break
 done
@@ -15,8 +15,9 @@ certutil -d sql:$HOME/.pki/nssdb -N --empty-password
 certutil -d sql:$HOME/.pki/nssdb -A -t "C,," -n mkcert -i rootCA.pem
 certutil -d sql:$HOME/.pki/nssdb -L
 
+echo "Waiting for manifest.mpd to be available..."
+
 while true; do
-    echo "Waiting for manifest.mpd to be available..."
     curl -s -f -o /dev/null http://cdn.local/manifest.mpd && break
     sleep 1
 done

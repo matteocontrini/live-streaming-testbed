@@ -51,6 +51,14 @@ cd comnetsemu/testbed
 ./start.sh
 ```
 
+- Then in another shell (within the VM) you can watch the logs of the experiments:
+
+```shell
+./logs.sh
+```
+
+The emulation outputs are saved in the `client/out` directory.
+
 ### Note for Apple Silicon users
 
 ComNetsEmu currently doesn't work if you're using an **Apple Silicon** machine. To make it work, install Parallels Desktop and modify the Vagrantfile by adding the following configuration block:

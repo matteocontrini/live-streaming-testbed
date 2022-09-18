@@ -18,7 +18,7 @@ library(here)
 Load the data:
 
 ```{r}
-expname = 'hspa+_h3'
+expname = 'spike_h3'
 filename = paste0('experiment_', expname, '.json')
 path = here() %>% str_remove('analysis') %>% paste0('client/out/', filename)
 df <- fromJSON(readLines(path), flatten=TRUE) %>% as.data.frame
@@ -34,6 +34,20 @@ buffer_empty_events = df %>% filter(type=='BUFFER_EMPTY')
 buffer_loaded_events = df %>% filter(type=='BUFFER_LOADED')
 rep_switch_events = df %>% filter(type=='REPRESENTATION_SWITCH')
 ```
+
+Add fake representation switch to have the bitrate line go until the end:
+
+```{r}
+rep_switch_events = rep_switch_events %>% 
+  add_row(
+    timestamp=max(status$timestamp),
+    type='REPRESENTATION_SWITCH',
+    data.videoBitrate=tail(rep_switch_events, 1)$data.videoBitrate,
+    data.audioBitrate=tail(rep_switch_events, 1)$data.audioBitrate,
+  )
+```
+
+Calculate stalled areas:
 
 ```{r}
 playback_events = df %>% filter(type=='PLAYBACK_STALLED' | type=='PLAYBACK_RESUMED') %>% select(timestamp, type)

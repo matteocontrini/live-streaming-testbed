@@ -17,6 +17,6 @@ RUN mkdir ffmpeg && \
     cd - && \
     rm -rf ffmpeg
 
-COPY dash.sh .
+COPY abr.sh .
 
-CMD ["./dash.sh", "/live/source/dash.mp4", "/live/www"]
+CMD ["./abr.sh", "/live/source/abr.mp4", "/live/www"]

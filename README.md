@@ -1,12 +1,14 @@
-# Testbed for MPEG-DASH live streaming
+# Testbed for MPEG-DASH / HLS live streaming
 
 >⚠️ Work in progress :)
 
-This repository contains a testbed for emulating a live video streaming setup based on MPEG-DASH over resource-constrained networks. It was built for my master thesis.
+This repository contains a testbed for emulating a live video streaming setup based on MPEG-DASH / HLS over resource-constrained networks. It was built for my master thesis.
 
 The testbed is based on the [ComNetsEmu](https://github.com/stevelorenz/comnetsemu) emulator.
 
 ## Why DASH and not HLS?
+
+TODO: now using H.264 and HLS.
 
 Not my choice 🥹. The emulation is run in a Chromium instance which only [ships](https://www.chromium.org/audio-video/) with royalty-free codecs, like Google's VP9. And HLS doesn't support VP9, so DASH is the only choice.
 

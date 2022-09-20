@@ -3,8 +3,11 @@ FROM node:16-bullseye
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && \
-    apt-get install -y ca-certificates curl chromium libnss3-tools && \
+    apt-get install -y ca-certificates curl libnss3-tools chromium && \
     rm -rf /var/lib/apt/lists/*
+
+RUN wget -q -O chromium-ffmpeg.deb http://ports.ubuntu.com/pool/universe/c/chromium-browser/chromium-codecs-ffmpeg-extra_80.0.3987.163-0ubuntu1_$(dpkg --print-architecture).deb && \
+    dpkg -i chromium-ffmpeg.deb
 
 WORKDIR /client
 

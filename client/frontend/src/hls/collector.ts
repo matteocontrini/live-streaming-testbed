@@ -15,6 +15,7 @@ class EventsCollector {
     isStalled: boolean = false;
     isVideoBufferEmpty: boolean = false;
     isAudioBufferEmpty: boolean = false;
+    isFirstFragmentLoaded: boolean = false;
 
     constructor(hls: Hls, video: HTMLMediaElement) {
         this.hls = hls;
@@ -40,6 +41,8 @@ class EventsCollector {
 
     async onFragLoaded(_event: Events.FRAG_LOADED, data: FragLoadedData) {
         console.log('Fragment loaded: ' + data.frag.relurl);
+
+        this.isFirstFragmentLoaded = true;
 
         const url = data.frag.url;
         const mediaType = data.frag.type;
@@ -74,7 +77,7 @@ class EventsCollector {
             ? BufferHelper.bufferInfo(this.bufferController.tracks.audio.buffer, this.element.currentTime, 0.25).len
             : 0;
 
-        const latency = this.hls.latency;
+        const latency = this.isFirstFragmentLoaded ? this.hls.latency : 0;
         const rate = this.element.playbackRate;
 
         // Status

@@ -6,6 +6,7 @@ import {resetEvents, saveEvents} from '../events/events';
 import path from 'path';
 import {resetTimer} from '../events/timer';
 import HttpVersion from './httpversion';
+import ABRProtocol from './ABRProtocol';
 
 
 type NetworkPatternPoint = {
@@ -19,17 +20,20 @@ type NetworkPatternPoint = {
 class Experiment {
     name: string;
     pattern: string;
+    protocol: ABRProtocol;
     httpVersion: HttpVersion;
     minBitrate: number;
     liveCatchup: boolean;
 
     constructor(name: string,
                 pattern: string,
+                protocol: ABRProtocol,
                 httpVersion: HttpVersion,
                 minBitrate: number = -1,
                 liveCatchup: boolean = false) {
         this.name = name;
         this.pattern = pattern;
+        this.protocol = protocol;
         this.httpVersion = httpVersion;
         this.minBitrate = minBitrate;
         this.liveCatchup = liveCatchup;
@@ -38,7 +42,7 @@ class Experiment {
     async run() {
         const pattern = await this.loadNetworkPattern();
         resetTimer();
-        await startPlayer(this.liveCatchup, this.httpVersion, this.minBitrate);
+        await startPlayer(this.protocol, this.httpVersion, this.minBitrate, this.liveCatchup);
         await resetEvents();
 
         for (const point of pattern) {
@@ -67,16 +71,16 @@ class Experiment {
 }
 
 const experiments = [
-    // new Experiment('lte_h1', 'lte', HttpVersion.HTTP1_1, 3000),
-    // new Experiment('lte_h2', 'lte', HttpVersion.HTTP2, 3000),
-    // new Experiment('lte_h3', 'lte', HttpVersion.HTTP3, 3000),
-    // new Experiment('hspa+_h1', 'hspa+', HttpVersion.HTTP1_1, 3000),
-    // new Experiment('hspa+_h2', 'hspa+', HttpVersion.HTTP2, 3000),
-    // new Experiment('hspa+_h3', 'hspa+', HttpVersion.HTTP3, 3000),
-    // new Experiment('lte_catchup', 'lte', HttpVersion.HTTP3, 3000, true),
-    // new Experiment('hspa+_catchup', 'hspa+', HttpVersion.HTTP3, 3000, true),
-    new Experiment('cascade_h3', 'cascade', HttpVersion.HTTP3),
-    new Experiment('spike_h3', 'spike', HttpVersion.HTTP3),
+    // new Experiment('lte_h1', 'lte', ABRProtocol.DASH, HttpVersion.HTTP1_1, 3000),
+    // new Experiment('lte_h2', 'lte', ABRProtocol.DASH, HttpVersion.HTTP2, 3000),
+    // new Experiment('lte_h3', 'lte', ABRProtocol.DASH, HttpVersion.HTTP3, 3000),
+    // new Experiment('hspa+_h1', 'hspa+', ABRProtocol.DASH, HttpVersion.HTTP1_1, 3000),
+    // new Experiment('hspa+_h2', 'hspa+', ABRProtocol.DASH, HttpVersion.HTTP2, 3000),
+    // new Experiment('hspa+_h3', 'hspa+', ABRProtocol.DASH, HttpVersion.HTTP3, 3000),
+    // new Experiment('lte_catchup', 'lte', ABRProtocol.DASH, HttpVersion.HTTP3, 3000, true),
+    // new Experiment('hspa+_catchup', 'hspa+', ABRProtocol.DASH, HttpVersion.HTTP3, 3000, true),
+    new Experiment('cascade_h3', 'cascade', ABRProtocol.HLS, HttpVersion.HTTP3),
+    new Experiment('spike_h3', 'spike', ABRProtocol.HLS, HttpVersion.HTTP3),
     // TODO: slow jitters and fast jitters
     // https://github.com/twitchtv/acm-mmsys-2020-grand-challenge/blob/master/normal-network-patterns.js
 ];

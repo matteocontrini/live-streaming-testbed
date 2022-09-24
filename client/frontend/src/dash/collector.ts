@@ -1,6 +1,6 @@
 import dashjs, {BufferEvent, FragmentLoadingCompletedEvent} from 'dashjs';
 import {MediaPlayerClass} from 'dashjs';
-import * as api from './api';
+import * as api from '../api';
 
 const INTERVAL = 250;
 
@@ -22,6 +22,17 @@ class EventsCollector {
         this.player.on(dashjs.MediaPlayer.events.FRAGMENT_LOADING_COMPLETED, this.onFragmentLoadingCompleted);
         this.player.on(dashjs.MediaPlayer.events.REPRESENTATION_SWITCH, this.onRepresentationSwitch.bind(this));
         this.interval = setInterval(this.tick.bind(this), INTERVAL);
+    }
+
+    stop() {
+        this.player.off(dashjs.MediaPlayer.events.BUFFER_EMPTY, this.onBufferEmpty);
+        this.player.off(dashjs.MediaPlayer.events.BUFFER_LOADED, this.onBufferLoaded);
+        this.player.off(dashjs.MediaPlayer.events.PLAYBACK_WAITING, this.onPlaybackWaiting);
+        this.player.off(dashjs.MediaPlayer.events.PLAYBACK_PLAYING, this.onPlaybackPlaying);
+        this.player.off(dashjs.MediaPlayer.events.FRAGMENT_LOADING_COMPLETED, this.onFragmentLoadingCompleted);
+        this.player.off(dashjs.MediaPlayer.events.REPRESENTATION_SWITCH, this.onRepresentationSwitch.bind(this));
+        clearInterval(this.interval);
+        this.interval = undefined;
     }
 
     async onBufferEmpty(e: BufferEvent) {
@@ -54,8 +65,8 @@ class EventsCollector {
             e.request.mediaType,
             e.request.startTime,
             e.request.duration,
-            e.request.requestStartDate,
-            e.request.requestEndDate!
+            e.request.requestStartDate.getTime() / 1000,
+            e.request.requestEndDate!.getTime() / 1000
         );
     }
 

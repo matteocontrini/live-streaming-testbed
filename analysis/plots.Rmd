@@ -201,14 +201,25 @@ Fragment waterfall.
 library(lubridate)
 
 fragment_load = df %>%
-  filter(type == 'FRAGMENT_LOADED') %>%
-  mutate(
-    data.requestStartDate=ymd_hms(data.requestStartDate),
-    data.requestEndDate=ymd_hms(data.requestEndDate),
-    requestDuration=as.numeric(data.requestEndDate-data.requestStartDate),
-    requestOffset=as.numeric(data.requestStartDate-min(data.requestStartDate)),
-    id=seq_along(data.url)
-  )
+  filter(type == 'FRAGMENT_LOADED')
+
+if (is.character(df$data.requestStartDate)) {
+  fragment_load = fragment_load %>% 
+    mutate(
+      data.requestStartDate=ymd_hms(data.requestStartDate),
+      data.requestEndDate=ymd_hms(data.requestEndDate),
+      requestDuration=as.numeric(data.requestEndDate-data.requestStartDate),
+      requestOffset=as.numeric(data.requestStartDate-min(data.requestStartDate)),
+      id=seq_along(data.url)
+    )
+} else {
+  fragment_load = fragment_load %>% 
+    mutate(
+      requestDuration=as.numeric(data.requestEndTime-data.requestStartTime),
+      requestOffset=as.numeric(data.requestStartTime-min(data.requestStartTime)),
+      id=seq_along(data.url)
+    )
+}
 
 fragment_load
 ```

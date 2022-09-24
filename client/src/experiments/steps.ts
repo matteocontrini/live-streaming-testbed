@@ -4,24 +4,38 @@ import {logEvent} from '../events/events';
 import {sendMessage} from '../api/server';
 import {getTimestamp} from '../events/timer';
 import HttpVersion from './httpversion';
+import ABRProtocol from './ABRProtocol';
 
 const API_HOST = process.env.API_HOST || 'localhost:3000';
 const PREFIX = `http://${API_HOST}`;
 
-async function startPlayer(liveCatchup: boolean, httpVersion: HttpVersion, minBitrate: number) {
-    let url;
+async function startPlayer(abrProtocol: ABRProtocol, httpVersion: HttpVersion, minBitrate: number, liveCatchup: boolean) {
+    let manifestFileName;
+    switch (abrProtocol) {
+        case ABRProtocol.DASH:
+            manifestFileName = 'manifest.mpd';
+            break
+        case ABRProtocol.HLS:
+            manifestFileName = 'master.m3u8';
+            break
+    }
+
+    let baseUrl;
     switch (httpVersion) {
         case HttpVersion.HTTP1_1:
-            url = 'http://cdn.local/manifest.mpd';
+            baseUrl = 'http://cdn.local';
             break;
         case HttpVersion.HTTP2:
-            url = 'https://cdn.local/manifest.mpd';
+            baseUrl = 'https://cdn.local';
             break;
         case HttpVersion.HTTP3:
-            url = 'https://cdn.local:444/manifest.mpd';
+            baseUrl = 'https://cdn.local:444';
             break;
     }
-    const msg = {type: 'start', source: url, liveCatchup, minBitrate};
+
+    let url = `${baseUrl}/${manifestFileName}`;
+
+    const msg = {type: 'start', url, protocol: abrProtocol, liveCatchup, minBitrate};
     await sendMessage(msg);
 }
 

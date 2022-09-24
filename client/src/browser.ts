@@ -3,11 +3,12 @@ import puppeteer, {ConsoleMessage, HTTPRequest, HTTPResponse} from 'puppeteer';
 import chalk from 'chalk';
 
 const DEBUG = false;
+const CHROMIUM_DEBUG = false;
 
 export async function startBrowser() {
-    const additionalArgs = DEBUG ? ['--v=1'] : [];
+    const additionalArgs = CHROMIUM_DEBUG ? ['--v=1'] : [];
     const browser = await puppeteer.launch({
-        dumpio: DEBUG,
+        dumpio: DEBUG || CHROMIUM_DEBUG,
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',

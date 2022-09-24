@@ -24,8 +24,8 @@ type FragmentEventData = {
     mediaType: string;
     startTime: number;
     duration: number;
-    requestStartDate: Date;
-    requestEndDate: Date;
+    requestStartTime: number;
+    requestEndTime: number;
 }
 
 type RepresentationSwitchEventData = {

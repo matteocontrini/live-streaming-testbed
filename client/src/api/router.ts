@@ -81,8 +81,8 @@ export const appRouter = trpc
             mediaType: z.string(),
             startTime: z.number(),
             duration: z.number(),
-            requestStartDate: z.date(),
-            requestEndDate: z.date()
+            requestStartTime: z.number(),
+            requestEndTime: z.number()
         }),
         async resolve({input}) {
             logEvent({

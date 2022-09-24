@@ -1,18 +1,21 @@
-# Testbed for MPEG-DASH / HLS live streaming
+# Testbed for MPEG-DASH / Apple HLS live streaming
 
 >⚠️ Work in progress :)
 
-This repository contains a testbed for emulating a live video streaming setup based on MPEG-DASH / HLS over resource-constrained networks. It was built for my master thesis.
+This repository contains a testbed for emulating a live video streaming setup based on MPEG-DASH / Apple HLS over resource-constrained networks. It was built for my master thesis.
 
 The testbed is based on the [ComNetsEmu](https://github.com/stevelorenz/comnetsemu) emulator.
 
-## Why DASH and not HLS?
+## DASH vs HLS
 
-TODO: now using H.264 and HLS.
+This project was initially built using DASH (and DASH.js as a client library). The reason is that I needed to run the emulation inside a Linux ARM64 virtual machine (Apple Silicon machine), where only Chromium is available and Chromium only [ships](https://www.chromium.org/audio-video/) with royalty-free codecs, like Google's VP9. HLS doesn't support VP9 so DASH was the only choice. 
 
-Not my choice 🥹. The emulation is run in a Chromium instance which only [ships](https://www.chromium.org/audio-video/) with royalty-free codecs, like Google's VP9. And HLS doesn't support VP9, so DASH is the only choice.
+I later found a way to install non-free codecs with Chromium so I switched to H.264 as a codec.
 
-What about using Chrome instead of Chromium? Unfortunately I'm on ARM and Chrome provides no builds for Linux ARM64 at the moment.
+With H.264 support I was then able to switch to HLS as the ABR protocol, which:
+
+1) is easier to understand and work with, and...
+2) the most commonly used library, HLS.js, is written in TypeScript (like this project) and seems to have a higher code quality and extensibility.
 
 ## How to run
 

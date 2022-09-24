@@ -65,7 +65,14 @@ export function logEvent(event: Event) {
             break
     }
 
-    console.log(`[${event.timestamp.toFixed(3)}] ${color(event.type)} ${JSON.stringify(event.data) ?? ''}`);
+    let eventData = event.data ? formatEventData(event.data) : '';
+
+    console.log(`[${event.timestamp.toFixed(3)}] ${color(event.type)} ${eventData}`);
+}
+
+function formatEventData(data: StatusEventData | BufferEventData | LinkConfigUpdateEventData | FragmentEventData | RepresentationSwitchEventData) {
+    let keys = Object.keys(data ?? {});
+    return keys.map(key => `${key}=${(data as any)[key]}`).join(' ');
 }
 
 export function resetEvents() {
